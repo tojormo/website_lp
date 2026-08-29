@@ -2,40 +2,40 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- トップページ -->
   <url>
-    <loc>https://example.com/index.html</loc>
-    <lastmod>2026-02-28</lastmod>
+    <loc>https://tojormo.com/index.html</loc>
+    <lastmod>2026-08-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <!-- RMOとは -->
   <url>
-    <loc>https://example.com/about.html</loc>
-    <lastmod>2026-02-28</lastmod>
+    <loc>https://tojormo.com/about.html</loc>
+    <lastmod>2026-08-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- 3つの目的（主要取り組み） -->
   <url>
-    <loc>https://example.com/solutions.html</loc>
-    <lastmod>2026-02-28</lastmod>
+    <loc>https://tojormo.com/solutions.html</loc>
+    <lastmod>2026-08-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- 地域の課題 -->
   <url>
-    <loc>https://example.com/challenges.html</loc>
-    <lastmod>2026-02-28</lastmod>
+    <loc>https://tojormo.com/challenges.html</loc>
+    <lastmod>2026-08-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- お問合せ -->
   <url>
-    <loc>https://example.com/contact.html</loc>
-    <lastmod>2026-02-28</lastmod>
+    <loc>https://tojormo.com/contact.html</loc>
+    <lastmod>2026-08-29</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
