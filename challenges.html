@@ -4,44 +4,258 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>地域の課題 ｜ とうじょうRMO</title>
-<meta name="description" content="東条地域が直面する高齢化・人口減少と、農業を取り巻く環境の課題。">
+<meta name="description" content="数字で見る東条地域の高齢化・若者減少と、農業・暮らしを取り巻く課題。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+/* =========================================================
+   地域の課題ページ専用スタイル
+   ・サイト共通の style.css（変数・カード・見出し）に整合
+   ・カードのホバー／角丸／影は .act カードと同一トーン
+   ・アイコンは共通のラインSVG（stroke:currentColor）で統一
+   ========================================================= */
+
+/* 導入ブロック（他ページの .intro と同じ中央寄せトーン） */
+.challenge-intro{max-width:820px;margin:0 auto 8px;text-align:center;}
+.challenge-intro .sec-lead{margin:16px auto 0;}
+
+/* 数字パネル */
+.crisis-panel{margin:44px 0 60px;}
+.crisis-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;}
+
+/* 数字カード（.act と同じ質感：白・1px罫線・角丸14px・浮くホバー） */
+.crisis-card{
+  position:relative;overflow:hidden;
+  background:var(--white);border:1px solid var(--line);border-radius:14px;
+  padding:30px 28px;
+  transition:transform .4s var(--ease),box-shadow .4s var(--ease);
+}
+.crisis-card:hover{transform:translateY(-6px);box-shadow:0 24px 50px -34px rgba(0,0,0,.4);}
+.crisis-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--green);}
+
+.crisis-head{display:flex;align-items:center;gap:14px;margin-bottom:10px;}
+/* アイコンボックス（.act .ic と同じトーン：グレー地・角丸・green描画） */
+.crisis-icon{
+  width:52px;height:52px;flex:0 0 auto;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--gray);color:var(--green-deep);
+}
+.crisis-icon svg{display:block;width:26px;height:26px;}
+/* ラベルは共通の eyebrow と同じ運用（green・Inter・字間広め） */
+.crisis-label{
+  display:block;font-family:"Inter",sans-serif;font-weight:600;
+  letter-spacing:.16em;font-size:.68rem;text-transform:uppercase;color:var(--green);
+}
+.crisis-card h3{margin:2px 0 0;font-size:1.05rem;font-weight:700;color:var(--ink);}
+
+.crisis-number{
+  font-family:"Inter","Noto Sans JP",sans-serif;font-weight:700;line-height:1.15;
+  font-size:clamp(2.1rem,5vw,3.2rem);color:var(--green-deep);margin:10px 0 8px;
+}
+.crisis-number small{font-family:"Noto Sans JP",sans-serif;font-size:.92rem;margin-left:6px;color:var(--ink);}
+.crisis-card p{font-size:.88rem;line-height:1.85;color:var(--ink-soft);margin:0;}
+
+.crisis-card.wide{grid-column:1/-1;}
+
+/* 農作業チップ（共通 .tags と同じ丸囲みトーン） */
+.task-chips{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 4px;}
+.task-chips span{
+  background:var(--white);border:1px solid var(--line);border-radius:30px;
+  padding:7px 18px;font-size:.84rem;font-weight:500;color:var(--green-deep);
+}
+.source-note{margin:20px 4px 0!important;text-align:right;font-size:.72rem!important;color:var(--ink-soft)!important;}
+
+/* 呼びかけ（gold アクセント＝サイトの補助色に合わせる） */
+.warning-message{
+  margin:0 0 58px;padding:30px 32px;border-radius:0 12px 12px 0;
+  background:var(--gray);border-left:4px solid var(--gold);
+}
+.warning-message h2{border:0!important;padding:0!important;margin:0 0 10px!important;color:var(--green-deep)!important;font-size:1.28rem!important;}
+.warning-message p{margin:0;color:var(--ink-soft);}
+
+/* 課題リスト（.mini-card 準拠：グレー地・角丸12px） */
+.challenge-section{margin-top:46px;}
+.challenge-list{display:grid!important;grid-template-columns:repeat(3,1fr);gap:18px!important;}
+.challenge-list li{
+  padding:26px 24px!important;background:var(--gray);
+  border:1px solid var(--line);border-radius:12px;
+}
+.challenge-list li::before{display:none!important;}
+/* アイコンボックス（白地・罫線・green描画でグレー地に映える） */
+.challenge-list .li-icon{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:46px;height:46px;border-radius:11px;
+  background:var(--white);border:1px solid var(--line);
+  color:var(--green-deep);margin-bottom:14px;
+}
+.challenge-list .li-icon svg{display:block;width:24px;height:24px;}
+.challenge-list b{display:block;margin-bottom:7px;color:var(--ink);}
+
+/* 導線（他ページと同じ back-link を上罫線つきで配置） */
+.action-link{margin-top:38px;padding-top:28px;border-top:1px solid var(--line);}
+
+@media(max-width:820px){
+  .crisis-grid{grid-template-columns:1fr;}
+  .crisis-card.wide{grid-column:auto;}
+  .challenge-list{grid-template-columns:1fr!important;}
+}
+@media(max-width:520px){
+  .crisis-card{padding:22px;}
+  .crisis-icon{width:46px;height:46px;}
+  .crisis-icon svg{width:24px;height:24px;}
+  .warning-message{padding:24px 20px;}
+}
+</style>
 </head>
 <body>
 <div id="site-header"></div>
+
 <section class="page-hero">
   <img src="images/hero3.jpg" alt="東条地域の農村集落">
   <div class="wrap"><span class="eyebrow">Challenges</span><h1>地域の課題</h1></div>
 </section>
+
 <div class="crumbs"><div class="wrap"><a href="index.html">HOME</a> ／ 地域の課題</div></div>
+
 <article class="article">
-  <div class="wrap" style="max-width:820px;">
-    <div class="reveal">
-      <p>高齢化が進む東条地域では、農業を維持し、暮らしを支え続けることが、年々むずかしくなっています。私たちはこの現実に向き合い、3地区が協力して解決に取り組みます。</p>
+  <div class="wrap" style="max-width:920px;">
+
+    <div class="reveal challenge-intro">
+      <span class="eyebrow">What is happening now</span>
+      <h2 class="sec-title">東条地域で今、起きていること</h2>
+      <p class="sec-lead">美しい農村風景と山田錦の産地を次の世代へつなぐために。東条地域では今、気候変動、高齢化、若者の減少、担い手不足が重なり、これまでの方法だけでは農業と暮らしを維持することが難しくなっています。</p>
     </div>
-    <div class="reveal">
+
+    <section class="crisis-panel reveal" aria-label="数字で見る東条地域の課題">
+      <div class="crisis-grid">
+        <div class="crisis-card">
+          <div class="crisis-head">
+            <span class="crisis-icon" aria-hidden="true">
+              <!-- 高齢者（1人） -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="3.4"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg>
+            </span>
+            <div><span class="crisis-label">Aging</span><h3>岡本・森地区の高齢化</h3></div>
+          </div>
+          <div class="crisis-number">24<small>％が後期高齢者</small></div>
+          <p>地域を支えてきた世代の高齢化が進み、共同作業や農地管理を担う人の確保が難しくなっています。</p>
+        </div>
+        <div class="crisis-card">
+          <div class="crisis-head">
+            <span class="crisis-icon" aria-hidden="true">
+              <!-- 若者（2人） -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="2.7"/><circle cx="16" cy="8" r="2.7"/><path d="M3.2 19a4.8 4.8 0 0 1 9.6 0"/><path d="M11.2 19a4.8 4.8 0 0 1 9.6 0"/></svg>
+            </span>
+            <div><span class="crisis-label">Youth</span><h3>南山地区の若者減少</h3></div>
+          </div>
+          <div class="crisis-number">15～24<small>歳が急激に減少</small></div>
+          <p>地域活動や農業を将来へ引き継ぐため、若い世代が地域と関わり続けられる仕組みが必要です。</p>
+        </div>
+        <div class="crisis-card">
+          <div class="crisis-head">
+            <span class="crisis-icon" aria-hidden="true">
+              <!-- 気候変動（温度計） -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0z"/><path d="M12 9v6.5"/></svg>
+            </span>
+            <div><span class="crisis-label">Climate</span><h3>気候変動と猛暑</h3></div>
+          </div>
+          <div class="crisis-number">年々<small>厳しくなる栽培環境</small></div>
+          <p>夏場の作業負担が増え、酒米・山田錦の品質を守るためにも、経験に加えて、より細かな栽培管理が求められています。</p>
+        </div>
+        <div class="crisis-card">
+          <div class="crisis-head">
+            <span class="crisis-icon" aria-hidden="true">
+              <!-- 空き家（家） -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V9l8-5 8 5v12M4 21h16M9 21v-6h6v6"/></svg>
+            </span>
+            <div><span class="crisis-label">Vacant homes</span><h3>空き家の増加</h3></div>
+          </div>
+          <div class="crisis-number">増加中<small>暮らしへの影響</small></div>
+          <p>管理されない家屋の増加は、害獣、防災、防犯など、地域全体の安心にも関わる課題です。</p>
+        </div>
+        <div class="crisis-card wide">
+          <div class="crisis-head">
+            <span class="crisis-icon" aria-hidden="true">
+              <!-- 農地（稲穂） -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18 M12 7l-2-2 M12 10l-3-2 M12 13l-3-2 M12 16l-2-2 M12 7l2-2 M12 10l3-2 M12 13l3-2 M12 16l2-2"/></svg>
+            </span>
+            <div><span class="crisis-label">Farmland</span><h3>支える人が減っても、守るべき農地は減りません</h3></div>
+          </div>
+          <div class="task-chips" aria-label="農地を守るための共同作業"><span>草刈り</span><span>水管理</span><span>溝掘り</span><span>農地保全</span></div>
+          <p>これまで地域全体で担ってきた作業を、一部の人や一つの団体だけで続けることは難しくなりつつあります。</p>
+        </div>
+      </div>
+      <p class="source-note">出典：説明会資料（人口に関する数値は総務省統計局資料をもとに作成）</p>
+    </section>
+
+    <div class="warning-message reveal">
+      <h2>このままでは守れない。だから、今から力を合わせる。</h2>
+      <p>農地、暮らし、地域コミュニティの課題は、すべてつながっています。とうじょうRMOは、岡本・森・南山の3地区が協力し、地域内外の力を組み合わせながら、無理なく続けられる解決策を小さく試していきます。</p>
+    </div>
+
+    <section class="reveal challenge-section">
       <h2>暮らしとコミュニティの課題</h2>
-      <ul>
-        <li><b>農業（農地）の維持が困難に。</b>高齢化と担い手不足により、農地・水路の維持や草刈りなどの共同作業が難しくなっています。</li>
-        <li><b>高齢者への支援。</b>急激な少子高齢化のなか、特に独居高齢者への見守りや生活支援が必要です。</li>
-        <li><b>空き家の増加。</b>多くの空き家が生まれ、害獣被害や防災・治安面の不安につながっています。</li>
+      <ul class="challenge-list">
+        <li>
+          <span class="li-icon" aria-hidden="true">
+            <!-- 稲穂 -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18 M12 7l-2-2 M12 10l-3-2 M12 13l-3-2 M12 16l-2-2 M12 7l2-2 M12 10l3-2 M12 13l3-2 M12 16l2-2"/></svg>
+          </span>
+          <b>農業・農地の維持</b>高齢化と担い手不足により、農地、水路、草刈りなどの共同作業が難しくなっています。
+        </li>
+        <li>
+          <span class="li-icon" aria-hidden="true">
+            <!-- 見守り（ハート） -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.35-7-9a4 4 0 0 1 7-2.65A4 4 0 0 1 19 12c0 4.65-7 9-7 9z"/></svg>
+          </span>
+          <b>高齢者への支援</b>少子高齢化が進むなか、特に独居高齢者への見守りや生活支援が必要です。
+        </li>
+        <li>
+          <span class="li-icon" aria-hidden="true">
+            <!-- 家 -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V9l8-5 8 5v12M4 21h16M9 21v-6h6v6"/></svg>
+          </span>
+          <b>空き家の増加</b>空き家の増加が、害獣被害や防災、防犯面の不安につながっています。
+        </li>
       </ul>
-    </div>
-    <div class="reveal">
+    </section>
+
+    <section class="reveal challenge-section">
       <h2>農業を取り巻く環境の変化</h2>
-      <ul>
-        <li><b>厳しい自然環境。</b>猛暑が続くなかでの農作業は負担が大きく、体調管理も含めて過酷さを増しています。</li>
-        <li><b>栽培管理の高度化。</b>気候の変化により、これまでの経験だけでは対応が難しく、きめ細かな管理が求められています。</li>
-        <li><b>コストの増大。</b>資材や燃料の高騰が、農業経営を圧迫しています。</li>
+      <ul class="challenge-list">
+        <li>
+          <span class="li-icon" aria-hidden="true">
+            <!-- 太陽（猛暑） -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2.5 M12 19.5V22 M2 12h2.5 M19.5 12H22 M4.9 4.9l1.8 1.8 M17.3 17.3l1.8 1.8 M19.1 4.9l-1.8 1.8 M6.7 17.3l-1.8 1.8"/></svg>
+          </span>
+          <b>厳しい自然環境</b>猛暑下の農作業は負担が大きく、体調管理を含めて過酷さを増しています。
+        </li>
+        <li>
+          <span class="li-icon" aria-hidden="true">
+            <!-- グラフ（管理の高度化） -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v16h16"/><path d="M7 15l3-4 3 2.5 4.5-6.5"/></svg>
+          </span>
+          <b>栽培管理の高度化</b>気候の変化により、これまでの経験だけでは対応が難しく、きめ細かな管理が求められています。
+        </li>
+        <li>
+          <span class="li-icon" aria-hidden="true">
+            <!-- 上昇矢印（コスト増） -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>
+          </span>
+          <b>コストの増大</b>資材や燃料の高騰が、農業経営を圧迫しています。
+        </li>
       </ul>
+    </section>
+
+    <div class="action-link reveal">
+      <a href="solutions.html" class="back-link">課題に対する3つの活動を見る →</a><br>
+      <a href="index.html" class="back-link">← トップへ戻る</a>
     </div>
-    <a href="solutions.html" class="back-link">課題に対する3つの活動を見る →</a><br>
-    <a href="index.html" class="back-link">← トップへ戻る</a>
+
   </div>
 </article>
+
 <div id="site-footer"></div>
 <script src="common.js"></script>
 </body>
