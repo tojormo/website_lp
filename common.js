@@ -19,7 +19,8 @@ const HEADER_HTML = `
       <a href="challenges.html" data-nav="challenges.html">地域の課題</a>
       <a href="index.html#news">お知らせ</a>
       <a href="contact.html">お問合せ</a>
-      <a href="https://lin.ee/p6sXYif" class="btn-nav btn-line" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.48 3 2 6.58 2 11c0 3.95 3.55 7.24 8.35 7.89.33.07.77.22.88.5.1.25.07.65.03.9l-.14.85c-.04.25-.2.98.86.53 1.06-.45 5.73-3.38 7.82-5.78C21.24 14.3 22 12.74 22 11c0-4.42-4.48-8-10-8z"/></svg>公式LINEから最新情報</a>
+      <a href="https://www.instagram.com/kato.agri.japan/" class="btn-nav" data-nav="https://www.instagram.com/kato.agri.japan/"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.75 2C4.57 2 2 4.57 2 7.75v8.5C2 19.43 4.57 22 7.75 22h8.5C19.43 22 22 19.43 22 16.25v-8.5C22 4.57 19.43 2 16.25 2h-8.5zm0 2h8.5A3.75 3.75 0 0 1 20 7.75v8.5A3.75 3.75 0 0 1 16.25 20h-8.5A3.75 3.75 0 0 1 4 16.25v-8.5A3.75 3.75 0 0 1 7.75 4zm8.75 1a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg>活動をみる→</a>
+      <a href="https://lin.ee/p6sXYif" class="btn-nav btn-line" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.48 3 2 6.58 2 11c0 3.95 3.55 7.24 8.35 7.89.33.07.77.22.88.5.1.25.07.65.03.9l-.14.85c-.04.25-.2.98.86.53 1.06-.45 5.73-3.38 7.82-5.78C21.24 14.3 22 12.74 22 11c0-4.42-4.48-8-10-8z"/></svg>イベントを探す→</a>
     </nav>
     <button class="burger" id="burger" aria-label="menu"><span></span><span></span><span></span></button>
   </div>
@@ -44,9 +45,9 @@ const FOOTER_HTML = `
         </div>
         <div class="foot-col">
           <h5>Links</h5>
-          <a href="https://www.city.kato.lg.jp/" target="_blank" rel="noopener">加東市役所</a>
-          <a href="https://www.welovetojo.com/" target="_blank" rel="noopener">We Love シン東条</a>
           <a href="https://sites.google.com/view/okamotoeinou/" target="_blank" rel="noopener">㈱岡本営農互助会</a>
+          <a href="https://www.welovetojo.com/" target="_blank" rel="noopener">We Love シン東条</a>
+          <a href="https://www.city.kato.lg.jp/" target="_blank" rel="noopener">加東市役所</a>
         </div>
       </div>
     </div>
