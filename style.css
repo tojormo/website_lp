@@ -62,6 +62,20 @@ header.scrolled{padding:12px 0;border-bottom:1px solid var(--line);box-shadow:0 
 .nav-links .btn-nav svg{display:block;flex:0 0 auto;width:18px;height:18px;}
 .nav-links .btn-nav::after{display:none;}
 .nav-links .btn-nav:hover{background:var(--green-deep);color:#fff;}
+/* メニュー文字の折り返し防止（Instagram・LINEボタンを並べても1行に収める） */
+.nav-links a{white-space:nowrap;}
+@media(min-width:821px) and (max-width:1180px){
+  .nav-links{gap:16px;}
+  .nav-links a{font-size:.8rem;letter-spacing:.02em;}
+  .nav-links .btn-nav{padding:8px 12px;gap:5px;}
+}
+@media(min-width:821px) and (max-width:960px){
+  .nav{gap:12px;}
+  .nav-links{gap:11px;}
+  .nav-links a{font-size:.74rem;letter-spacing:0;}
+  .nav-links .btn-nav{padding:7px 10px;}
+  .nav-links .btn-nav svg{width:15px;height:15px;}
+}
 /* いま開いているページのメニューを強調 */
 .nav-links a.current{color:var(--green);}
 .nav-links a.current::after{width:100%;}
