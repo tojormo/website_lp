@@ -1,42 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- トップページ -->
+  <!-- トップページ（canonicalと同じURLに統一） -->
   <url>
-    <loc>https://tojormo.com/index.html</loc>
-    <lastmod>2026-08-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <loc>https://tojormo.com/</loc>
+    <lastmod>2026-10-09</lastmod>
   </url>
-
   <!-- RMOとは -->
   <url>
     <loc>https://tojormo.com/about.html</loc>
-    <lastmod>2026-08-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <lastmod>2026-10-09</lastmod>
   </url>
-
   <!-- 3つの目的（主要取り組み） -->
   <url>
     <loc>https://tojormo.com/solutions.html</loc>
-    <lastmod>2026-08-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <lastmod>2026-10-09</lastmod>
   </url>
-
   <!-- 地域の課題 -->
   <url>
     <loc>https://tojormo.com/challenges.html</loc>
-    <lastmod>2026-08-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <lastmod>2026-10-09</lastmod>
   </url>
-
   <!-- お問合せ -->
   <url>
     <loc>https://tojormo.com/contact.html</loc>
-    <lastmod>2026-08-29</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+    <lastmod>2026-10-09</lastmod>
   </url>
 </urlset>
