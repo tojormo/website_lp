@@ -22,21 +22,6 @@
 .hero-copy h1 .em{color:var(--ink);white-space:nowrap;border-bottom:4px solid var(--green);}
 .hero-copy .lead{max-width:560px;}
 .hero-copy .lead b{color:var(--green-deep);font-weight:700;}
-.hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:30px;}
-.btn-line-hero{
-  display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:10px;
-  background:var(--green);color:#fff;font-weight:700;font-size:.95rem;
-  box-shadow:0 14px 30px -14px rgba(36,94,52,.7);
-  transition:transform .3s var(--ease),background .3s;
-}
-.btn-line-hero:hover{transform:translateY(-2px);background:var(--green-deep);}
-.btn-line-hero svg{width:22px;height:22px;flex:0 0 auto;}
-.btn-ghost{
-  display:inline-flex;align-items:center;gap:8px;padding:15px 22px;border-radius:10px;
-  border:1px solid var(--green);color:var(--green-deep);font-weight:600;font-size:.92rem;
-  background:rgba(255,255,255,.75);transition:background .3s;
-}
-.btn-ghost:hover{background:#fff;}
 
 /* ---------- 課題（要点のみ） ---------- */
 .issue-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:44px;}
@@ -92,11 +77,9 @@
 }
 @media(max-width:820px){
   .keys,.steps{grid-template-columns:1fr;}
-  .hero-actions{margin-top:24px;}
 }
 @media(max-width:520px){
   .issue-grid{grid-template-columns:1fr;}
-  .btn-line-hero,.btn-ghost{width:100%;justify-content:center;}
   .formula span{padding:8px 18px;font-size:.9rem;}
 }
 </style>
@@ -127,13 +110,6 @@
     <span class="badge">酒米「山田錦」最高峰の産地｜兵庫県加東市 東条</span>
     <h1>日本が誇る山田錦の産地が、<br><span class="em">あと5年</span>で<br>崩壊するかもしれない。</h1>
     <p class="lead">私たち<b>「とうじょうRMO」</b>は、<br>この問題を根本から<b>覆そう</b>としています。</p>
-    <div class="hero-actions">
-      <a href="https://lin.ee/p6sXYif" class="btn-line-hero" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.48 3 2 6.58 2 11c0 3.95 3.55 7.24 8.35 7.89.33.07.77.22.88.5.1.25.07.65.03.9l-.14.85c-.04.25-.2.98.86.53 1.06-.45 5.73-3.38 7.82-5.78C21.24 14.3 22 12.74 22 11c0-4.42-4.48-8-10-8z"/></svg>
-        公式LINEに登録する
-      </a>
-      <a href="#approach" class="btn-ghost">私たちの挑戦を知る ↓</a>
-    </div>
   </div>
   <div class="hero-dots" id="heroDots">
     <button class="active" data-i="0" aria-label="スライド1"></button>
