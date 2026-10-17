@@ -67,15 +67,15 @@
 .cta.final .eyebrow{color:var(--green-light);}
 .cta.final h2{margin:14px auto 14px;max-width:760px;line-height:1.6;}
 .cta.final h2 strong{color:var(--green-light);}
-.cta.final .btn-ig.primary{padding:18px 32px;}
-.cta.final .btn-ig.primary .ig-main{font-size:1.05rem;}
-.cta.final .sub-note{margin-top:22px;margin-bottom:0;font-size:.82rem;}
-.cta.final .sub-note a{color:#fff;text-decoration:underline;}
+.sns-links{display:grid;grid-template-columns:repeat(3,minmax(0,260px));justify-content:center;gap:16px;}
+.sns-links .btn-ig{display:flex;width:100%;}
+.sns-links .ig-arrow{margin-left:auto;}
 
 @media(max-width:960px){
   .issue-grid{grid-template-columns:repeat(2,1fr);}
 }
 @media(max-width:820px){
+  .sns-links{grid-template-columns:minmax(0,320px);}
   .keys,.steps{grid-template-columns:1fr;}
 }
 @media(max-width:520px){
@@ -292,19 +292,32 @@
     <span class="eyebrow">Be the first to witness</span>
     <h2>地域の未来をアップデートする瞬間の、<br><strong>最前列の目撃者</strong>になりませんか？</h2>
     <p>まずは公式LINEに登録して、とうじょうRMOの挑戦を見届けてください。</p>
-    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px;">
-      <a href="https://lin.ee/p6sXYif" class="btn btn-ig primary" target="_blank" rel="noopener" aria-label="公式LINEを友だち追加">
-        <span class="ig-icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.58 2 11c0 3.95 3.55 7.24 8.35 7.89.33.07.77.22.88.5.1.25.07.65.03.9l-.14.85c-.04.25-.2.98.86.53 1.06-.45 5.73-3.38 7.82-5.78C21.24 14.3 22 12.74 22 11c0-4.42-4.48-8-10-8z"/></svg>
-        </span>
+    <div class="sns-links">
+      <a href="https://lin.ee/p6sXYif" class="btn btn-ig" target="_blank" rel="noopener noreferrer" aria-label="公式LINEを友だち追加">
+        <span class="ig-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.58 2 11c0 3.95 3.55 7.24 8.35 7.89.33.07.77.22.88.5.1.25.07.65.03.9l-.14.85c-.04.25-.2.98.86.53 1.06-.45 5.73-3.38 7.82-5.78C21.24 14.3 22 12.74 22 11c0-4.42-4.48-8-10-8z"/></svg></span>
         <span class="ig-label">
-          <span class="ig-main">公式LINEを友だち追加</span>
-          <span class="ig-handle">最新の動きをいち早くお届け</span>
+          <span class="ig-main">公式LINE</span>
+          <span class="ig-handle">友だち追加で最新情報</span>
+        </span>
+        <span class="ig-arrow" aria-hidden="true">→</span>
+      </a>
+      <a href="https://www.instagram.com/kato.agri.japan/" class="btn btn-ig" target="_blank" rel="noopener noreferrer" aria-label="Instagram @kato.agri.japan をフォロー">
+        <span class="ig-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7.75 2C4.57 2 2 4.57 2 7.75v8.5C2 19.43 4.57 22 7.75 22h8.5C19.43 22 22 19.43 22 16.25v-8.5C22 4.57 19.43 2 16.25 2h-8.5zm0 2h8.5A3.75 3.75 0 0 1 20 7.75v8.5A3.75 3.75 0 0 1 16.25 20h-8.5A3.75 3.75 0 0 1 4 16.25v-8.5A3.75 3.75 0 0 1 7.75 4zm8.75 1a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg></span>
+        <span class="ig-label">
+          <span class="ig-main">Instagram</span>
+          <span class="ig-handle">@kato.agri.japan</span>
+        </span>
+        <span class="ig-arrow" aria-hidden="true">→</span>
+      </a>
+      <a href="https://note.com/kato_agri_japan" class="btn btn-ig" target="_blank" rel="noopener noreferrer" aria-label="とうじょうRMO｜note を読む">
+        <span class="ig-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 19V7.5A2.5 2.5 0 0 1 8.5 5h7A2.5 2.5 0 0 1 18 7.5V19"/><path d="M10 10h4M10 14h4"/></svg></span>
+        <span class="ig-label">
+          <span class="ig-main">note</span>
+          <span class="ig-handle">とうじょうRMO｜note</span>
         </span>
         <span class="ig-arrow" aria-hidden="true">→</span>
       </a>
     </div>
-    <p class="sub-note">日々の活動風景は <a href="https://www.instagram.com/kato.agri.japan/" target="_blank" rel="noopener">Instagram @kato.agri.japan</a> でも発信しています。</p>
   </div>
 </section>
 
