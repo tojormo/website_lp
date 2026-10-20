@@ -70,6 +70,7 @@ const FOOTER_HTML = `
           <a href="https://www.city.kato.lg.jp/" target="_blank" rel="noopener">加東市役所</a>
           <a href="https://www.welovetojo.com/" target="_blank" rel="noopener">We Love シン東条</a>
           <a href="https://sites.google.com/view/okamotoeinou/" target="_blank" rel="noopener">岡本営農互助会</a>
+          <a href="https://store.yamadanishiki.com/" target="_blank" rel="noopener">とうじょう米</a>
         </div>
       </div>
     </div>
