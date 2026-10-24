@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- トップページ（canonicalと同じURLに統一） -->
+  <!-- トップページ（canonicalと同じURLに統一／最新のお知らせ 2026-10-23 を反映） -->
   <url>
     <loc>https://tojormo.com/</loc>
-    <lastmod>2026-10-09</lastmod>
+    <lastmod>2026-10-23</lastmod>
   </url>
   <!-- RMOとは -->
   <url>
@@ -24,5 +24,25 @@
   <url>
     <loc>https://tojormo.com/contact.html</loc>
     <lastmod>2026-10-09</lastmod>
+  </url>
+  <!-- コラム記事：まちおこしは成功事例じゃなくていい（元記事作成日 2026.09.04） -->
+  <url>
+    <loc>https://tojormo.com/article/article_rmo.html</loc>
+    <lastmod>2026-10-25</lastmod>
+  </url>
+  <!-- コラム記事：RTK VRS “数センチの革命”（元記事作成日 2026.02.04） -->
+  <url>
+    <loc>https://tojormo.com/article/article_rtkvrs.html</loc>
+    <lastmod>2026-10-25</lastmod>
+  </url>
+  <!-- コラム記事：「水位管理」が導くスマート農業の本質（元記事作成日 2025.10.22） -->
+  <url>
+    <loc>https://tojormo.com/article/article_wataras.html</loc>
+    <lastmod>2026-10-25</lastmod>
+  </url>
+  <!-- コラム記事：気候変動から山田錦を守る生存戦略（元記事作成日 2026.03.17） -->
+  <url>
+    <loc>https://tojormo.com/article/article_yamadanishiki.html</loc>
+    <lastmod>2026-10-25</lastmod>
   </url>
 </urlset>
