@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<base target="_top">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<title>とうじょうRMO チャットアシスタント</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   とうじょうRMO キャラクター対話型UI (style.css 準拠)
+   ========================================================= */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --green: #2f7a43;
+  --green-deep: #245e34;
+  --ink: #2a2f2c;
+  --ink-soft: #5f6a63;
+  --line: #e4e6e2;
+  --white: #ffffff;
+  --gray: #f4f5f2;
+  --gray2: #eef0ec;
+  --green-light: #9ed4ab;
+  --green-pale: #eef5f0;
+  --danger: #d9383a;
+  --danger-soft: #fdf2f2;
+  --ease: cubic-bezier(.22,.61,.36,1);
+  --chara-h: clamp(150px, 34dvh, 320px);
+}
+html, body {
+  height: 100%;
+  background: var(--gray);
+  font-family: "Noto Sans JP", sans-serif;
+  color: var(--ink);
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  touch-action: manipulation;
+  overflow: hidden;
+}
+button, input, textarea { font-family: inherit; }
+
+.app {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  max-width: 720px;
+  margin: 0 auto;
+  background: var(--white);
+  box-shadow: 0 0 40px rgba(0,0,0,.05);
+  overflow: hidden;
+}
+
+/* ---------- ヘッダー ---------- */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  z-index: 30;
+}
+.logo-text { display: flex; flex-direction: column; line-height: 1.25; }
+.logo-text strong { font-weight: 700; font-size: 1.05rem; letter-spacing: .04em; color: var(--green-deep); }
+.logo-text small { font-family: "Inter","Noto Sans JP",sans-serif; font-weight: 500; font-size: .65rem; letter-spacing: .08em; color: var(--ink-soft); }
+.header-actions { display: flex; gap: 8px; }
+.btn-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid var(--line); background: var(--white); color: var(--ink-soft);
+  border-radius: 20px; padding: 6px 13px; font-size: .78rem; font-weight: 500;
+  cursor: pointer; transition: all .25s var(--ease);
+}
+.btn-pill:hover { border-color: var(--green); color: var(--green); background: var(--gray); }
+.btn-pill .count {
+  min-width: 18px; height: 18px; border-radius: 9px; padding: 0 5px;
+  background: var(--green); color: #fff; font-size: .65rem; font-family: "Inter",sans-serif;
+  display: inline-grid; place-items: center; line-height: 1;
+}
+.btn-pill .count:empty { display: none; }
+
+/* ---------- ステージ（キャラクター＋ふきだし） ---------- */
+.stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px 16px 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 100%, rgba(158,212,171,.45), transparent 70%),
+    radial-gradient(circle at 15% 20%, rgba(158,212,171,.18), transparent 35%),
+    radial-gradient(circle at 85% 35%, rgba(158,212,171,.15), transparent 30%),
+    linear-gradient(180deg, #fbfcfa 0%, var(--green-pale) 100%);
+  overflow: hidden;
+}
+/* 舞う葉っぱ（装飾） */
+.leaf {
+  position: absolute; width: 10px; height: 10px; border-radius: 0 70% 0 70%;
+  background: var(--green-light); opacity: .55; pointer-events: none;
+  animation: drift 9s linear infinite;
+}
+.leaf:nth-child(1) { left: 10%; top: 70%; animation-delay: 0s; }
+.leaf:nth-child(2) { left: 82%; top: 60%; animation-delay: -3s; width: 8px; height: 8px; }
+.leaf:nth-child(3) { left: 30%; top: 85%; animation-delay: -6s; width: 7px; height: 7px; }
+.leaf:nth-child(4) { left: 68%; top: 90%; animation-delay: -1.5s; }
+@keyframes drift {
+  0% { transform: translate(0,0) rotate(0deg); opacity: 0; }
+  15% { opacity: .55; }
+  100% { transform: translate(30px,-260px) rotate(320deg); opacity: 0; }
+}
+
+/* ふきだし */
+.balloon-area {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 580px;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.balloon {
+  position: relative;
+  background: var(--white);
+  border: 2px solid var(--green-light);
+  border-radius: 22px;
+  box-shadow: 0 10px 30px -12px rgba(36,94,52,.25);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  animation: pop .35s var(--ease);
+}
+.balloon::after, .balloon::before {
+  content: ""; position: absolute; left: 50%; transform: translateX(-50%);
+  width: 0; height: 0; border-style: solid;
+}
+.balloon::before { bottom: -14px; border-width: 14px 12px 0; border-color: var(--green-light) transparent transparent; }
+.balloon::after  { bottom: -10px; border-width: 12px 10px 0; border-color: var(--white) transparent transparent; }
+.balloon.error { border-color: #f6c8c8; background: var(--danger-soft); }
+.balloon.error::after { border-top-color: var(--danger-soft); }
+.balloon.error::before { border-top-color: #f6c8c8; }
+@keyframes pop {
+  0% { transform: scale(.92) translateY(8px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+.balloon-scroll {
+  overflow-y: auto;
+  padding: 16px 20px 14px;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+}
+.speaker {
+  display: inline-block;
+  font-size: .7rem; font-weight: 700; letter-spacing: .08em;
+  color: #fff; background: var(--green);
+  padding: 2px 12px; border-radius: 20px;
+  position: absolute; top: -12px; left: 18px;
+}
+.balloon.error .speaker { background: var(--danger); }
+.q-echo {
+  font-size: .78rem; color: var(--ink-soft);
+  background: var(--gray); border-radius: 10px;
+  padding: 6px 12px; margin: 4px 0 10px;
+  white-space: pre-wrap; word-break: break-word;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.q-echo::before { content: "Q. "; color: var(--green); font-weight: 700; font-family: "Inter",sans-serif; }
+.greet {
+  text-align: center; font-size: 1.15rem; font-weight: 700; color: var(--green-deep);
+  line-height: 1.6; padding: 6px 0 2px;
+}
+.greet-sub { text-align: center; font-size: .8rem; color: var(--ink-soft); margin-top: 4px; }
+.skip-hint {
+  text-align: right; font-size: .68rem; color: var(--ink-soft); margin-top: 6px;
+  animation: blinkHint 1s ease-in-out infinite;
+}
+@keyframes blinkHint { 50% { opacity: .35; } }
+
+/* キャラクター */
+.chara-wrap {
+  position: relative;
+  z-index: 4;
+  flex-shrink: 0;
+  height: var(--chara-h);
+  margin-top: 18px;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+}
+.chara-body {
+  height: calc(100% - 26px);
+  display: flex; align-items: flex-end; justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.chara-body img {
+  height: 100%; width: auto; max-width: 80vw; display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 18px rgba(36,94,52,.18));
+  transform-origin: 50% 100%;
+  animation: float 3.5s ease-in-out infinite;
+}
+.chara-body img.fallback { border-radius: 50%; }
+.chara-shadow {
+  position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
+  width: 46%; height: 14px; border-radius: 50%;
+  background: rgba(36,94,52,.16); filter: blur(3px);
+  animation: shadow 3.5s ease-in-out infinite;
+}
+.nameplate {
+  position: relative; z-index: 2;
+  font-size: .7rem; font-weight: 600; color: var(--green-deep);
+  background: rgba(255,255,255,.85); border: 1px solid var(--line);
+  border-radius: 20px; padding: 1px 12px; margin-top: 4px; letter-spacing: .06em;
+}
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes shadow { 0%,100% { transform: translateX(-50%) scale(1); opacity: 1; } 50% { transform: translateX(-50%) scale(.85); opacity: .7; } }
+
+/* 状態ごとのアニメーション */
+.stage.is-thinking .chara-body img { animation: think 1.4s ease-in-out infinite; }
+@keyframes think { 0%,100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg) translateY(-4px); } }
+.stage.is-talking .chara-body img { animation: talk .38s ease-in-out infinite; }
+@keyframes talk { 0%,100% { transform: translateY(0) scale(1,1); } 50% { transform: translateY(-5px) scale(1.015,.985); } }
+.stage.is-happy .chara-body img { animation: hop .6s var(--ease) 2, float 3.5s ease-in-out .6s infinite; }
+@keyframes hop { 0%,100% { transform: translateY(0); } 40% { transform: translateY(-22px); } }
+.stage.is-error .chara-body img { animation: shake .5s ease-in-out 2, float 3.5s ease-in-out 1s infinite; }
+@keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px) rotate(-3deg); } 75% { transform: translateX(6px) rotate(3deg); } }
+
+/* 考え中の「…」雲 */
+.thought {
+  position: absolute; top: 4%; right: -34px; z-index: 3;
+  background: var(--white); border: 2px solid var(--green-light);
+  border-radius: 18px; padding: 4px 10px;
+  display: none; gap: 4px; align-items: center;
+  box-shadow: 0 6px 14px -8px rgba(36,94,52,.3);
+}
+.thought::after {
+  content: ""; position: absolute; left: 4px; bottom: -10px;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--white); border: 2px solid var(--green-light);
+}
+.stage.is-thinking .thought { display: inline-flex; }
+
+/* ドット */
+.dots { display: inline-flex; gap: 4px; }
+.dots i {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+  animation: blink 1.4s infinite ease-in-out both;
+}
+.dots i:nth-child(1) { animation-delay: -.32s; }
+.dots i:nth-child(2) { animation-delay: -.16s; }
+@keyframes blink { 0%,80%,100% { transform: scale(0); opacity: .3; } 40% { transform: scale(1); opacity: 1; } }
+.typing { display: flex; align-items: center; gap: 10px; color: var(--green); font-size: .9rem; font-weight: 600; padding: 4px 0; }
+
+/* ---------- Markdown ---------- */
+.md { font-size: .92rem; line-height: 1.85; word-wrap: break-word; overflow-wrap: anywhere; }
+.md p { margin: 0 0 10px; }
+.md p:last-child { margin-bottom: 0; }
+.md .h { font-weight: 700; color: var(--green-deep); margin: 14px 0 6px; font-size: .98rem; }
+.md strong { color: var(--green-deep); font-weight: 700; }
+.md ul, .md ol { margin: 6px 0 12px; padding-left: 1.4em; }
+.md li { margin: 3px 0; }
+.md li::marker { color: var(--green); }
+.md code { background: var(--gray); border: 1px solid var(--line); color: var(--green-deep); border-radius: 4px; padding: 1px 6px; font-size: .88em; font-family: "Inter",sans-serif; }
+.md blockquote { margin: 8px 0 12px; padding: 6px 14px; border-left: 3px solid var(--green); background: var(--gray); border-radius: 0 8px 8px 0; color: var(--ink-soft); font-size: .88rem; }
+.table-wrap { overflow-x: auto; margin: 8px 0 14px; border: 1px solid var(--line); border-radius: 8px; }
+.md table { border-collapse: collapse; font-size: .82rem; width: 100%; min-width: 320px; }
+.md th, .md td { border-bottom: 1px solid var(--line); padding: 8px 12px; text-align: left; }
+.md th { background: var(--gray); color: var(--green-deep); font-weight: 700; white-space: nowrap; }
+.error-text { color: var(--danger); font-size: .9rem; }
+
+/* メタ・引用元 */
+.after { animation: fadeIn .35s var(--ease); }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; font-size: .72rem; color: var(--ink-soft); font-family: "Inter",sans-serif; }
+.meta .spacer { flex: 1; }
+.meta button { border: 1px solid var(--line); background: var(--white); color: var(--ink-soft); cursor: pointer; font-size: .72rem; padding: 3px 10px; border-radius: 12px; transition: all .2s var(--ease); }
+.meta button:hover { border-color: var(--green); color: var(--green); background: var(--gray); }
+.notice { font-size: .8rem; color: var(--ink-soft); background: var(--gray); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; margin-top: 10px; }
+details.sources { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 8px; }
+details.sources summary { cursor: pointer; font-size: .76rem; color: var(--green); list-style: none; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-weight: 600; user-select: none; }
+details.sources summary::-webkit-details-marker { display: none; }
+.src-label { display: inline-flex; align-items: center; background: var(--gray); padding: 2px 8px; border-radius: 6px; font-size: .74rem; }
+.src-label::before { content: "＋ "; }
+details.sources[open] .src-label::before { content: "－ "; }
+.doc-tag { border: 1px solid var(--line); border-radius: 6px; padding: 1px 8px; font-size: .72rem; background: var(--white); color: var(--ink-soft); font-weight: 400; }
+.src { margin-top: 8px; background: var(--gray); border-radius: 8px; padding: 10px 12px; border: 1px solid var(--line); }
+.src-title { font-weight: 700; font-size: .8rem; color: var(--green-deep); }
+.src-title a { color: var(--green); margin-left: 8px; font-weight: 600; text-decoration: underline; }
+.excerpt { margin: 6px 0 0; padding: 6px 10px; border-left: 2px solid var(--green); background: var(--white); font-size: .78rem; color: var(--ink-soft); white-space: pre-wrap; max-height: 5.6em; overflow: hidden; border-radius: 0 4px 4px 0; }
+.excerpt.expanded { max-height: none; }
+.more { border: none; background: none; color: var(--green); font-size: .72rem; cursor: pointer; padding-top: 4px; font-weight: 600; }
+.retry { margin-top: 10px; border: 1px solid var(--danger); background: var(--white); color: var(--danger); border-radius: 20px; padding: 5px 14px; cursor: pointer; font-size: .8rem; font-weight: 600; transition: all .2s var(--ease); }
+.retry:hover { background: var(--danger); color: #fff; }
+
+/* ---------- 質問候補（チップ） ---------- */
+.chips-bar {
+  background: var(--white);
+  border-top: 1px solid var(--line);
+  padding: 10px 0 2px;
+}
+.chips-title { font-size: .68rem; color: var(--ink-soft); padding: 0 18px 4px; font-weight: 600; letter-spacing: .04em; }
+.chips {
+  display: flex; gap: 8px; overflow-x: auto; padding: 2px 16px 8px;
+  scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex-shrink: 0;
+  background: var(--white); border: 1px solid var(--green-light);
+  border-radius: 20px; padding: 6px 14px;
+  font-size: .82rem; font-weight: 500; color: var(--green-deep);
+  cursor: pointer; transition: all .25s var(--ease); white-space: nowrap;
+}
+.chip:hover { background: var(--green); border-color: var(--green); color: #fff; }
+.chip:disabled { opacity: .45; cursor: default; background: var(--white); color: var(--green-deep); border-color: var(--line); }
+
+/* ---------- 入力エリア ---------- */
+.composer-wrap { padding: 6px 16px calc(12px + env(safe-area-inset-bottom)); background: var(--white); z-index: 20; }
+form#composer {
+  display: flex; gap: 8px; align-items: flex-end;
+  background: var(--gray); border: 1px solid var(--line); border-radius: 24px;
+  padding: 4px 6px 4px 16px; transition: border-color .3s var(--ease), background .3s;
+}
+form#composer:focus-within { border-color: var(--green); background: var(--white); box-shadow: 0 4px 16px -4px rgba(47,122,67,.15); }
+textarea#input {
+  flex: 1; resize: none; border: none; outline: none; background: transparent;
+  font: inherit; line-height: 1.5; padding: 9px 0; max-height: 120px; min-height: 40px;
+  color: var(--ink); font-size: .94rem;
+}
+textarea#input::placeholder { color: var(--ink-soft); opacity: .7; }
+button#send {
+  width: 38px; height: 38px; flex-shrink: 0; border: none; border-radius: 50%;
+  background: var(--green); color: #fff; cursor: pointer; display: grid; place-items: center;
+  transition: all .25s var(--ease);
+}
+button#send:hover:not(:disabled) { background: var(--green-deep); transform: translateY(-1px); }
+button#send:disabled { background: var(--line) !important; color: #aab0aa !important; cursor: default !important; transform: none !important; }
+button#send svg { width: 17px; height: 17px; transform: translateX(1px); }
+.composer-foot { display: flex; justify-content: space-between; gap: 8px; margin-top: 6px; font-size: .68rem; color: var(--ink-soft); padding: 0 4px; }
+#counter.over { color: var(--danger); font-weight: 700; }
+
+/* ---------- 会話ログ（ボトムシート） ---------- */
+.overlay {
+  position: absolute; inset: 0; z-index: 40;
+  background: rgba(20,30,24,.35);
+  opacity: 0; pointer-events: none; transition: opacity .3s var(--ease);
+}
+.sheet {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 41;
+  height: 78%;
+  background: var(--gray);
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -10px 40px rgba(0,0,0,.15);
+  display: flex; flex-direction: column;
+  transform: translateY(105%); transition: transform .35s var(--ease);
+}
+.log-open .overlay { opacity: 1; pointer-events: auto; }
+.log-open .sheet { transform: translateY(0); }
+.sheet-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px 10px; background: var(--white); border-radius: 20px 20px 0 0;
+  border-bottom: 1px solid var(--line);
+}
+.sheet-head strong { color: var(--green-deep); font-size: .95rem; }
+.sheet-body { flex: 1; overflow-y: auto; padding: 12px 16px 20px; }
+.log-empty { text-align: center; color: var(--ink-soft); font-size: .85rem; padding: 40px 0; }
+.msg { display: flex; gap: 10px; margin: 14px 0; align-items: flex-start; }
+.msg.user { justify-content: flex-end; }
+.avatar { width: 34px; height: 34px; border-radius: 10px; overflow: hidden; flex-shrink: 0; background: var(--white); border: 1px solid var(--line); }
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.bubble { border-radius: 14px; padding: 11px 15px; word-wrap: break-word; overflow-wrap: anywhere; font-size: .88rem; line-height: 1.8; }
+.user .bubble { background: var(--green); color: #fff; border-top-right-radius: 4px; font-weight: 500; max-width: 84%; white-space: pre-wrap; }
+.bot .bubble { background: var(--white); border: 1px solid var(--line); border-top-left-radius: 4px; flex: 1; min-width: 0; }
+.bot.error .bubble { background: var(--danger-soft); border-color: #f6c8c8; color: var(--danger); }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* 小さい画面：キャラを少し小さく */
+@media (max-height: 640px) { :root { --chara-h: clamp(120px, 28dvh, 220px); } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <!-- ヘッダー -->
+  <header>
+    <div class="logo-text">
+      <strong>とうじょうRMO</strong>
+      <small>AI しつもん妖精</small>
+    </div>
+    <div class="header-actions">
+      <button type="button" class="btn-pill" id="openLog" aria-label="会話ログ">
+        💬 ログ <span class="count" id="logCount"></span>
+      </button>
+      <button type="button" class="btn-pill" id="clear" aria-label="最初から">↺ 最初から</button>
+    </div>
+  </header>
+
+  <!-- ステージ：キャラクターと対話 -->
+  <main class="stage" id="stage">
+    <span class="leaf"></span><span class="leaf"></span><span class="leaf"></span><span class="leaf"></span>
+    <div class="balloon-area" aria-live="polite">
+      <div class="balloon" id="balloon">
+        <span class="speaker">RMOの妖精</span>
+        <div class="balloon-scroll" id="balloonScroll"></div>
+      </div>
+    </div>
+    <div class="chara-wrap">
+      <div class="thought" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span></div>
+      <div class="chara-body" id="charaBody" title="タップしてね"></div>
+      <div class="chara-shadow"></div>
+      <div class="nameplate">東条地域の案内役</div>
+    </div>
+  </main>
+
+  <!-- 質問候補 -->
+  <div class="chips-bar">
+    <div class="chips-title" id="chipsTitle">こんなこと聞いてみてね</div>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <!-- 入力フォーム -->
+  <div class="composer-wrap">
+    <form id="composer" autocomplete="off">
+      <label for="input" class="sr-only">質問を入力</label>
+      <textarea id="input" rows="1" maxlength="1200" placeholder="妖精に話しかけてね"></textarea>
+      <button type="submit" id="send" aria-label="送信">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </form>
+    <div class="composer-foot">
+      <span>※AIの妖精がお答えします。くわしくは事務局にご確認ください。</span>
+      <span id="counter"></span>
+    </div>
+  </div>
+
+  <!-- 会話ログ -->
+  <div class="overlay" id="overlay"></div>
+  <section class="sheet" id="sheet" aria-label="会話ログ">
+    <div class="sheet-head">
+      <strong>💬 これまでの会話</strong>
+      <button type="button" class="btn-pill" id="closeLog">閉じる ✕</button>
+    </div>
+    <div class="sheet-body" id="logBody"></div>
+  </section>
+</div>
+
+<script>
+  // ===== 設定 =====
+  var GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwyNSdhkTZ5b8HCTXBGhIHOaYQrvg8vyohEws7m7rbP_wbyLkz_--m5tJbaSujH2G5dzw/exec';
+  var IMG_BASE = 'images/';
+  var CHARA_ALT = 'とうじょうRMOの妖精';
+  var MAX_CHARS = 1000;
+  var MAX_HISTORY_TURNS = 6;
+  var GREETING = 'やっほー！\nとうじょうRMOのこと、\nなんでも聞いてね！';
+  var EXAMPLES = [
+    'とうじょうRMOってなに？',
+    'どんな課題があるの？',
+    'スマート農業ってどういうこと？',
+    'わたしも参加できる？'
+  ];
+  // キャラをタップしたときのひとこと
+  var POKE_LINES = [
+    'わっ！くすぐったいよ〜',
+    '東条のお米、おいしいんだよ！',
+    '気になることがあったら、下から話しかけてね！',
+    '山田錦って知ってる？酒米なんだ！'
+  ];
+
+  var state = { history: [], log: [], busy: false, typingTimer: null, skipTyping: null, lastQ: '' };
+  var els = {};
+  var HAS_GAS = typeof google !== 'undefined' && google.script && google.script.run;
+
+  // ===== キャラクター画像（フォールバック用SVG） =====
+  var FALLBACK_FACE = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">' +
+    '<circle cx="32" cy="32" r="32" fill="#eef5f0"/>' +
+    '<path d="M32 10 Q46 10 46 32 Q46 52 32 52 Q18 52 18 32 Q18 10 32 10" fill="#9ed4ab"/>' +
+    '<circle cx="26" cy="28" r="3.2" fill="#245e34"/>' +
+    '<circle cx="38" cy="28" r="3.2" fill="#245e34"/>' +
+    '<path d="M28 37 Q32 41 36 37" stroke="#245e34" stroke-width="2.6" fill="none" stroke-linecap="round"/>' +
+    '<path d="M20 18 Q25 13 32 15 Q29 20 20 18" fill="#2f7a43"/>' +
+    '<path d="M44 18 Q39 13 32 15 Q35 20 44 18" fill="#2f7a43"/>' +
+    '</svg>');
+  function charaSrc(kind) { return IMG_BASE + (kind === 'full' ? 'chara-full_nograin.png' : 'chara-face.png'); }
+  function charaImg(kind, alt) {
+    var img = document.createElement('img');
+    img.className = 'chara-img';
+    img.dataset.kind = kind;
+    img.alt = alt || '';
+    img.addEventListener('error', function onErr() {
+      img.removeEventListener('error', onErr);
+      img.src = FALLBACK_FACE;
+      if (kind === 'full') img.classList.add('fallback');
+    });
+    img.src = charaSrc(kind);
+    return img;
+  }
+
+  // ===== HTML エスケープ + Markdown =====
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function inlineMd(escaped) {
+    return escaped
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  }
+  function isTableSep(line) {
+    return /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)*\|?\s*$/.test(line);
+  }
+  function tableCells(line) {
+    return line.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map(function (c) { return inlineMd(esc(c.trim())); });
+  }
+  var RE_UL = /^\s*(?:[-*]\s+|・\s*)(.*)$/;
+  var RE_OL = /^\s*(\d+)[.)．]\s+(.*)$/;
+  var RE_H = /^\s*#{1,6}\s+(.*)$/;
+  var RE_QUOTE = /^\s*>\s?(.*)$/;
+  function startsBlock(lines, i) {
+    var l = lines[i];
+    return RE_UL.test(l) || RE_OL.test(l) || RE_H.test(l) || RE_QUOTE.test(l) ||
+      (l.indexOf('|') >= 0 && i + 1 < lines.length && isTableSep(lines[i + 1]));
+  }
+  function renderMarkdown(md) {
+    var lines = String(md == null ? '' : md).replace(/\r\n?/g, '\n').split('\n');
+    var html = '', i = 0, m, items;
+    while (i < lines.length) {
+      var l = lines[i];
+      if (!l.trim()) { i++; continue; }
+      if (l.indexOf('|') >= 0 && i + 1 < lines.length && isTableSep(lines[i + 1])) {
+        var head = tableCells(l); i += 2;
+        var rows = [];
+        while (i < lines.length && lines[i].trim() && lines[i].indexOf('|') >= 0) { rows.push(tableCells(lines[i])); i++; }
+        html += '<div class="table-wrap"><table><thead><tr>' +
+          head.map(function (c) { return '<th>' + c + '</th>'; }).join('') + '</tr></thead><tbody>' +
+          rows.map(function (r) { return '<tr>' + r.map(function (c) { return '<td>' + c + '</td>'; }).join('') + '</tr>'; }).join('') +
+          '</tbody></table></div>';
+        continue;
+      }
+      if ((m = l.match(RE_H))) { html += '<p class="h">' + inlineMd(esc(m[1])) + '</p>'; i++; continue; }
+      if (RE_UL.test(l)) {
+        items = [];
+        while (i < lines.length && (m = lines[i].match(RE_UL))) { items.push('<li>' + inlineMd(esc(m[1])) + '</li>'); i++; }
+        html += '<ul>' + items.join('') + '</ul>'; continue;
+      }
+      if ((m = l.match(RE_OL))) {
+        var start = parseInt(m[1], 10) || 1;
+        items = [];
+        while (i < lines.length && (m = lines[i].match(RE_OL))) { items.push('<li>' + inlineMd(esc(m[2])) + '</li>'); i++; }
+        html += '<ol' + (start !== 1 ? ' start="' + start + '"' : '') + '>' + items.join('') + '</ol>'; continue;
+      }
+      if (RE_QUOTE.test(l)) {
+        items = [];
+        while (i < lines.length && (m = lines[i].match(RE_QUOTE))) { items.push(inlineMd(esc(m[1]))); i++; }
+        html += '<blockquote>' + items.join('<br>') + '</blockquote>'; continue;
+      }
+      var buf = [inlineMd(esc(l.trim()))]; i++;
+      while (i < lines.length && lines[i].trim() && !startsBlock(lines, i)) { buf.push(inlineMd(esc(lines[i].trim()))); i++; }
+      html += '<p>' + buf.join('<br>') + '</p>';
+    }
+    return html;
+  }
+  function safeHttpsUrl(u) {
+    return (typeof u === 'string' && /^https:\/\/[^\s"'<>]+$/.test(u)) ? u : '';
+  }
+
+  // ===== DOM 部品 =====
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  // キャラクターの状態：idle / thinking / talking / happy / error
+  var moodTimer = null;
+  function setMood(mood, durationMs) {
+    clearTimeout(moodTimer);
+    els.stage.classList.remove('is-thinking', 'is-talking', 'is-happy', 'is-error');
+    if (mood && mood !== 'idle') els.stage.classList.add('is-' + mood);
+    if (durationMs) moodTimer = setTimeout(function () { setMood('idle'); }, durationMs);
+  }
+
+  // ふきだしを入れ替え（毎回ポップアニメーション）
+  function resetBalloon(isError) {
+    stopTyping();
+    var b = els.balloon;
+    b.classList.toggle('error', !!isError);
+    b.style.animation = 'none';
+    void b.offsetWidth;
+    b.style.animation = '';
+    els.balloonScroll.innerHTML = '';
+    els.balloonScroll.scrollTop = 0;
+    return els.balloonScroll;
+  }
+  function addQuestionEcho(box, q) {
+    if (q) box.appendChild(el('div', 'q-echo', q));
+  }
+
+  // タイプライター表示（ふきだしタップでスキップ）
+  function stopTyping() {
+    if (state.typingTimer) { clearInterval(state.typingTimer); state.typingTimer = null; }
+    if (state.skipTyping) { var f = state.skipTyping; state.skipTyping = null; f(); }
+  }
+  function typewrite(container, onDone) {
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null, false);
+    var nodes = [], n, total = 0;
+    while ((n = walker.nextNode())) { nodes.push({ node: n, text: n.nodeValue }); total += n.nodeValue.length; }
+    if (reduce || !total) { onDone(); return; }
+    nodes.forEach(function (o) { o.node.nodeValue = ''; });
+    var step = Math.max(1, Math.ceil(total / 160)); // 長文でも約2.5秒で表示完了
+    var idx = 0, pos = 0;
+    var hint = el('div', 'skip-hint', 'タップでぜんぶ表示 ▶');
+    container.appendChild(hint);
+    function finish() {
+      if (state.typingTimer) { clearInterval(state.typingTimer); state.typingTimer = null; }
+      state.skipTyping = null;
+      nodes.forEach(function (o) { o.node.nodeValue = o.text; });
+      hint.remove();
+      onDone();
+    }
+    state.skipTyping = finish;
+    state.typingTimer = setInterval(function () {
+      var left = step;
+      while (left > 0 && idx < nodes.length) {
+        var o = nodes[idx];
+        var take = Math.min(left, o.text.length - pos);
+        pos += take; left -= take;
+        o.node.nodeValue = o.text.slice(0, pos);
+        if (pos >= o.text.length) { idx++; pos = 0; }
+      }
+      if (idx >= nodes.length) finish();
+    }, 16);
+  }
+
+  // ===== 画面描画 =====
+  function renderWelcome() {
+    var box = resetBalloon(false);
+    var g = el('div', 'greet');
+    g.innerHTML = esc(GREETING).replace(/\n/g, '<br>');
+    box.appendChild(g);
+    box.appendChild(el('p', 'greet-sub', '下のボタンを選ぶか、自由に話しかけてね！'));
+    setMood('happy', 1300);
+  }
+  function renderChips() {
+    els.chips.innerHTML = '';
+    EXAMPLES.forEach(function (q) {
+      var c = el('button', 'chip', q);
+      c.type = 'button';
+      c.addEventListener('click', function () { send(q); });
+      els.chips.appendChild(c);
+    });
+  }
+  function showThinking(q) {
+    var box = resetBalloon(false);
+    addQuestionEcho(box, q);
+    var t = el('div', 'typing');
+    var dots = el('span', 'dots');
+    dots.innerHTML = '<i></i><i></i><i></i>';
+    var label = el('span', null, '資料をよんでいます…');
+    t.appendChild(dots); t.appendChild(label);
+    box.appendChild(t);
+    setMood('thinking');
+    var sec = 0;
+    var timer = setInterval(function () {
+      sec++;
+      if (sec === 3) label.textContent = 'うーん、お返事を考えているよ…';
+      if (sec >= 12) label.textContent = 'もう少し待ってね…';
+    }, 1000);
+    return { stop: function () { clearInterval(timer); } };
+  }
+  function copyText(text, btn) {
+    function done() { var o = btn.textContent; btn.textContent = 'コピーしました'; setTimeout(function () { btn.textContent = o; }, 1500); }
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); done(); } catch (e) { }
+      ta.remove();
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fallback);
+    else fallback();
+  }
+  function renderSources(container, sources) {
+    if (!sources || !sources.length) return;
+    var det = el('details', 'sources');
+    var sum = el('summary');
+    sum.appendChild(el('span', 'src-label', '参考にした資料'));
+    sources.forEach(function (s) { sum.appendChild(el('span', 'doc-tag', s.doc)); });
+    det.appendChild(sum);
+    sources.forEach(function (s) {
+      var box = el('div', 'src');
+      var title = el('div', 'src-title', s.doc);
+      var url = safeHttpsUrl(s.url);
+      if (url) {
+        var a = el('a', null, 'リンクを見る →');
+        a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+        title.appendChild(a);
+      }
+      box.appendChild(title);
+      (s.excerpts || []).forEach(function (x) {
+        var q = el('blockquote', 'excerpt', x);
+        box.appendChild(q);
+        if (x.length > 90) {
+          var more = el('button', 'more', '続きを表示 ▼');
+          more.type = 'button';
+          more.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var open = q.classList.toggle('expanded');
+            more.textContent = open ? '折りたたむ ▲' : '続きを表示 ▼';
+          });
+          box.appendChild(more);
+        }
+      });
+      det.appendChild(box);
+    });
+    container.appendChild(det);
+  }
+  function showAnswer(q, res) {
+    var box = resetBalloon(false);
+    addQuestionEcho(box, q);
+    var body = el('div', 'md');
+    body.innerHTML = renderMarkdown(res.answer);
+    box.appendChild(body);
+    setMood('talking');
+    typewrite(body, function () {
+      setMood('happy', 1300);
+      var after = el('div', 'after');
+      if (res.truncated) after.appendChild(el('div', 'notice', '※ 文章が長いため途中で終了しました。質問を分けて試してみてね。'));
+      renderSources(after, res.sources);
+      var meta = el('div', 'meta');
+      if (res.elapsedMs) meta.appendChild(el('span', null, (res.elapsedMs / 1000).toFixed(1) + 's'));
+      meta.appendChild(el('span', 'spacer'));
+      var copy = el('button', null, 'コピー');
+      copy.type = 'button';
+      copy.addEventListener('click', function (e) { e.stopPropagation(); copyText(res.answer, copy); });
+      meta.appendChild(copy);
+      after.appendChild(meta);
+      box.appendChild(after);
+    });
+  }
+  function showError(q, message, retryQuestion) {
+    var box = resetBalloon(true);
+    addQuestionEcho(box, q);
+    box.appendChild(el('div', 'error-text', message));
+    if (retryQuestion) {
+      var btn = el('button', 'retry', 'もういちど送信');
+      btn.type = 'button';
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (state.busy) return;
+        send(retryQuestion, { skipLog: true });
+      });
+      box.appendChild(btn);
+    }
+    setMood('error', 1200);
+  }
+
+  // ===== 会話ログ =====
+  function pushLog(entry) {
+    state.log.push(entry);
+    els.logCount.textContent = state.log.filter(function (x) { return x.role === 'user'; }).length || '';
+  }
+  function renderLog() {
+    var body = els.logBody;
+    body.innerHTML = '';
+    if (!state.log.length) { body.appendChild(el('div', 'log-empty', 'まだ会話はないよ。妖精に話しかけてみてね！')); return; }
+    state.log.forEach(function (m) {
+      if (m.role === 'user') {
+        var r = el('div', 'msg user');
+        r.appendChild(el('div', 'bubble', m.text));
+        body.appendChild(r);
+      } else {
+        var row = el('div', 'msg bot' + (m.error ? ' error' : ''));
+        var av = el('div', 'avatar');
+        av.appendChild(charaImg('face', ''));
+        var b = el('div', 'bubble');
+        if (m.error) { b.textContent = m.text; }
+        else {
+          var md = el('div', 'md');
+          md.innerHTML = renderMarkdown(m.text);
+          b.appendChild(md);
+          renderSources(b, m.sources);
+        }
+        row.appendChild(av); row.appendChild(b);
+        body.appendChild(row);
+      }
+    });
+    setTimeout(function () { body.scrollTop = body.scrollHeight; }, 50);
+  }
+  function openLog() { renderLog(); els.app.classList.add('log-open'); }
+  function closeLog() { els.app.classList.remove('log-open'); }
+
+  // ===== サーバー呼び出し =====
+  function clientId() {
+    try {
+      var id = localStorage.getItem('chat_cid');
+      if (!id) { id = Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem('chat_cid', id); }
+      return id;
+    } catch (e) { return ''; }
+  }
+  function callAsk(payload) {
+    if (HAS_GAS) {
+      return new Promise(function (resolve, reject) {
+        google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).ask(payload);
+      });
+    }
+    if (GAS_ENDPOINT) {
+      payload.clientId = clientId();
+      return fetch(GAS_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload), redirect: 'follow' })
+        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
+    }
+    return new Promise(function (resolve) { setTimeout(function () { resolve(previewAnswer(payload)); }, 1200); });
+  }
+  function previewAnswer() {
+    return {
+      ok: true, elapsedMs: 1200, model: 'preview', fallback: false,
+      answer: '（プレビュー表示だよ！GASと連携すると本番の回答が返ってくるよ）\n\n**とうじょうRMO**は、東条地域の「岡本・森・南山」のみんなが手を取り合って、農業と豊かな暮らしを未来につなぐためのチームだよ！\n\n- お米（酒米・山田錦）の畑や水路を守る\n- スマート農業で、作業を少しでも楽にする\n- おじいちゃん・おばあちゃんと若い世代が一緒に活動する\n\nこんなことを進めているんだ！',
+      sources: [{ doc: 'サイト情報まとめ', url: 'https://tojormo.com/', excerpts: ['農村RMO（農村型地域運営組織）とは | 複数の集落の機能を補完して、農用地保全活動や農業を核とした経済活動と併せて、生活支援など地域コミュニティの維持に資する取組を行う組織です。'] }]
+    };
+  }
+
+  // ===== 送信・ビジー制御 =====
+  function setBusy(b) {
+    state.busy = b;
+    updateCounter();
+    Array.prototype.forEach.call(document.querySelectorAll('.chip'), function (c) { c.disabled = b; });
+  }
+  function send(question, opts) {
+    opts = opts || {};
+    var q = String(question || '').trim();
+    if (!q || state.busy) return;
+    if (q.length > MAX_CHARS) { showError(q.slice(0, 40) + '…', '質問は ' + MAX_CHARS + ' 文字以内にしてね！'); return; }
+    closeLog();
+    if (!opts.skipLog) pushLog({ role: 'user', text: q });
+    els.chipsTitle.textContent = 'ほかにも聞いてみる？';
+    setBusy(true);
+    var thinking = showThinking(q);
+    var payload = { question: q, history: state.history.slice(-MAX_HISTORY_TURNS * 2) };
+    callAsk(payload).then(function (res) {
+      thinking.stop();
+      if (res && res.ok) {
+        showAnswer(q, res);
+        pushLog({ role: 'model', text: res.answer, sources: res.sources });
+        state.history.push({ role: 'user', text: q }, { role: 'model', text: res.answer });
+        state.history = state.history.slice(-MAX_HISTORY_TURNS * 2);
+      } else {
+        var retryable = res && ['BUSY', 'API', 'INTERNAL', 'EMPTY'].indexOf(res.code) >= 0;
+        var msg = (res && res.error) || 'エラーが発生しました。';
+        showError(q, msg, retryable ? q : null);
+        pushLog({ role: 'model', text: msg, error: true });
+      }
+    }, function (err) {
+      thinking.stop();
+      console.error(err);
+      var msg = '通信エラーが発生しました。電波の良い場所でもう一度お試しください。';
+      showError(q, msg, q);
+      pushLog({ role: 'model', text: msg, error: true });
+    }).then(function () {
+      setBusy(false);
+    });
+  }
+
+  // キャラをタップ → ひとこと
+  function pokeChara() {
+    if (state.busy || state.typingTimer) return;
+    var box = resetBalloon(false);
+    var line = POKE_LINES[Math.floor(Math.random() * POKE_LINES.length)];
+    var g = el('div', 'greet', line);
+    box.appendChild(g);
+    setMood('happy', 1300);
+  }
+
+  // ===== 入力欄とカウンター =====
+  function autoGrow() {
+    els.input.style.height = 'auto';
+    els.input.style.height = Math.min(els.input.scrollHeight, 120) + 'px';
+  }
+  function updateCounter() {
+    if (!els.input || !els.send || !els.counter) return;
+    var val = els.input.value || '';
+    var n = val.length;
+    els.counter.textContent = n > MAX_CHARS * 0.8 ? n + ' / ' + MAX_CHARS : '';
+    els.counter.className = n > MAX_CHARS ? 'over' : '';
+    els.send.disabled = state.busy || !val.trim().length || n > MAX_CHARS;
+  }
+  function resetChat() {
+    if (state.busy) return;
+    state.history = [];
+    state.log = [];
+    els.logCount.textContent = '';
+    els.chipsTitle.textContent = 'こんなこと聞いてみてね';
+    closeLog();
+    renderWelcome();
+  }
+
+  // ===== 初期化 =====
+  function init() {
+    els.app = document.getElementById('app');
+    els.stage = document.getElementById('stage');
+    els.balloon = document.getElementById('balloon');
+    els.balloonScroll = document.getElementById('balloonScroll');
+    els.chips = document.getElementById('chips');
+    els.chipsTitle = document.getElementById('chipsTitle');
+    els.input = document.getElementById('input');
+    els.send = document.getElementById('send');
+    els.counter = document.getElementById('counter');
+    els.form = document.getElementById('composer');
+    els.logBody = document.getElementById('logBody');
+    els.logCount = document.getElementById('logCount');
+
+    var body = document.getElementById('charaBody');
+    body.appendChild(charaImg('full', CHARA_ALT));
+    body.addEventListener('click', pokeChara);
+
+    // ふきだしタップでタイプ表示をスキップ
+    els.balloon.addEventListener('click', function () { if (state.skipTyping) stopTyping(); });
+
+    renderChips();
+    renderWelcome();
+    updateCounter();
+
+    els.form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var q = els.input.value;
+      if (!q.trim() || state.busy || q.length > MAX_CHARS) return;
+      els.input.value = '';
+      autoGrow();
+      updateCounter();
+      els.input.blur();
+      send(q);
+    });
+    els.input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && e.keyCode !== 229) {
+        e.preventDefault();
+        els.form.requestSubmit ? els.form.requestSubmit() : els.form.dispatchEvent(new Event('submit', { cancelable: true }));
+      }
+    });
+    ['input', 'keyup', 'change', 'compositionend'].forEach(function (evt) {
+      els.input.addEventListener(evt, function () { autoGrow(); updateCounter(); });
+    });
+    document.getElementById('clear').addEventListener('click', resetChat);
+    document.getElementById('openLog').addEventListener('click', openLog);
+    document.getElementById('closeLog').addEventListener('click', closeLog);
+    document.getElementById('overlay').addEventListener('click', closeLog);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeLog(); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+</script>
+</body>
+</html>
