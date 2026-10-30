@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>とうじょうRMO アシスタント</title>
+<link rel="icon" type="image/png" href="img/robot-face.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ===== デザイントークン（自然・妖精をイメージしたカラー） ===== */
+  :root {
+    --bg: #f7fcf8;
+    --surface: #ffffff;
+    --ink: #333333;
+    --muted: #6b7a6c;
+    --line: #dcedc8;
+    --green: #689f38;         /* メインカラー（緑） */
+    --green-2: #558b2f;
+    --green-soft: #f1f8e9;
+    --gold: #ffa000;          /* アクセント（オレンジ/黄色） */
+    --gold-soft: #fff8e1;
+    --danger: #e53935;
+    --danger-soft: #ffebee;
+    --sans: "M PLUS Rounded 1c", "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, system-ui, sans-serif;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; touch-action: manipulation; }
+  body { font-family: var(--sans); color: var(--ink); background: var(--bg); font-size: 15px; line-height: 1.7; letter-spacing: .02em; -webkit-font-smoothing: antialiased; }
+  button { font-family: inherit; }
+  .app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; max-width: 860px; margin: 0 auto; background: var(--surface); box-shadow: 0 0 20px rgba(0,0,0,0.02); }
+
+  /* ===== ヘッダー ===== */
+  header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.94); backdrop-filter: blur(6px); z-index: 10; }
+  .brand-icon { width: 38px; height: 38px; border-radius: 50%; background: var(--green-soft); border: 2px solid var(--green); overflow: hidden; flex-shrink: 0; display: grid; place-items: center;}
+  .brand-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .brand { flex: 1; min-width: 0; line-height: 1.3; }
+  .brand h1 { font-size: 16px; font-weight: 700; margin: 0; color: var(--green); }
+  .btn-line { border: 1.5px solid var(--green); background: var(--surface); color: var(--green); border-radius: 20px; padding: 6px 14px; font-size: 12px; font-weight: 700; cursor: pointer; transition: .2s; white-space: nowrap; }
+  .btn-line:hover { background: var(--green-soft); }
+
+  /* ===== チャット領域 ===== */
+  #chat { flex: 1; overflow-y: auto; padding: 12px 16px 20px; scroll-behavior: smooth; background: var(--bg); }
+
+  /* ようこそ画面 */
+  .welcome { min-height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 0; text-align: center; }
+  .welcome-chara { position: relative; margin-bottom: 16px; }
+  .welcome-chara img { width: 130px; height: auto; display: block; animation: float 3s ease-in-out infinite; filter: drop-shadow(0 8px 12px rgba(104, 159, 56, 0.2)); }
+  .welcome-chara img.fallback { width: 100px; border-radius: 50px; border: 2px solid var(--green); }
+  .welcome h2 { font-size: 20px; font-weight: 700; color: var(--green); margin: 0 0 24px; line-height: 1.4; }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .chips { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 320px; }
+  .chip { background: var(--surface); border: 2px solid var(--line); border-radius: 20px; padding: 12px 16px; font-size: 14px; font-weight: 500; color: var(--ink); cursor: pointer; transition: .2s; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
+  .chip:hover { border-color: var(--green); color: var(--green); background: var(--green-soft); transform: translateY(-1px); }
+  .chip:disabled { opacity: .5; cursor: default; transform: none; }
+
+  /* メッセージ */
+  .msg { display: flex; gap: 10px; margin: 16px 0; align-items: flex-start; }
+  .msg.user { justify-content: flex-end; margin-left: 20px; }
+  .msg.bot { margin-right: 10px; }
+  .avatar { width: 36px; height: 36px; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: var(--green-soft); border: 2px solid var(--line); margin-top: 4px; }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .avatar.thinking img { animation: think 1.2s ease-in-out infinite; transform-origin: 50% 80%; }
+  @keyframes think { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg) translateY(-2px); } }
+  .bot-col { flex: 1; min-width: 0; }
+  
+  .bubble { border-radius: 16px; padding: 12px 16px; word-wrap: break-word; overflow-wrap: anywhere; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+  .user .bubble { background: var(--green); color: #fff; border-top-right-radius: 4px; font-weight: 500; }
+  .bot .bubble { background: var(--surface); border: 1px solid var(--line); border-top-left-radius: 4px; }
+  .bot.error .bubble { background: var(--danger-soft); border-color: #ffcdd2; color: var(--danger); }
+
+  /* 回答本文（Markdown の簡易表示） */
+  .md p { margin: 0 0 12px; }
+  .md p:last-child { margin-bottom: 0; }
+  .md .h { font-weight: 700; color: var(--green); font-size: 1.05em; border-bottom: 2px dashed var(--line); padding-bottom: 4px; margin-bottom: 8px; }
+  .md strong { color: var(--gold); font-weight: 700; }
+  .md ul, .md ol { margin: 0 0 12px; padding-left: 1.4em; }
+  .md li { margin: 4px 0; }
+  .md li::marker { color: var(--green); }
+  .md code { background: var(--green-soft); color: var(--green-2); border-radius: 4px; padding: 2px 6px; font-size: .9em; font-weight: 500; }
+  .md blockquote { margin: 0 0 12px; padding: 8px 12px; border-left: 4px solid var(--green-soft); background: #fcfdfa; color: var(--muted); border-radius: 0 8px 8px 0; }
+  
+  .table-wrap { overflow-x: auto; margin: 8px 0 12px; border-radius: 8px; border: 1px solid var(--line); }
+  .md table { border-collapse: collapse; font-size: 13px; width: 100%; min-width: 400px; }
+  .md th, .md td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  .md th { background: var(--green-soft); color: var(--green-2); font-weight: 700; white-space: nowrap; }
+
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; font-size: 11px; color: var(--muted); }
+  .meta .spacer { flex: 1; }
+  .meta button { border: 1px solid var(--line); background: var(--surface); color: var(--muted); cursor: pointer; font-size: 11px; padding: 4px 10px; border-radius: 12px; font-weight: 500; }
+  .meta button:hover { color: var(--green); border-color: var(--green); background: var(--green-soft); }
+  .notice { font-size: 12px; color: var(--ink); background: var(--gold-soft); border-radius: 8px; padding: 6px 12px; margin-top: 12px; font-weight: 500; border: 1px solid #ffe0b2; }
+
+  /* 参照元 */
+  details.sources { margin-top: 12px; border-top: 1px dashed var(--line); padding-top: 10px; }
+  details.sources summary { cursor: pointer; font-size: 12px; color: var(--green-2); list-style: none; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-weight: 700; user-select: none; }
+  details.sources summary::-webkit-details-marker { display: none; }
+  .src-label { background: var(--green-soft); padding: 2px 8px; border-radius: 10px; }
+  .src-label::before { content: "＋ "; }
+  details.sources[open] .src-label::before { content: "－ "; }
+  .doc-tag { border: 1px solid var(--line); border-radius: 10px; padding: 2px 8px; font-size: 11px; background: var(--surface); color: var(--muted); font-weight: 400; }
+  .src { margin-top: 10px; background: #fafafa; border-radius: 8px; padding: 10px; border: 1px solid #eee; }
+  .src-title { font-weight: 700; font-size: 12px; color: var(--green-2); }
+  .src-title a { color: var(--gold); margin-left: 8px; font-weight: 700; text-decoration: none; }
+  .excerpt { margin: 6px 0 0; padding: 6px 10px; border-left: 2px solid var(--line); font-size: 11.5px; color: #555; white-space: pre-wrap; max-height: 6em; overflow: hidden; }
+  .excerpt.expanded { max-height: none; }
+  .more { border: none; background: none; color: var(--green); font-size: 11px; cursor: pointer; padding: 4px 0 0; font-weight: 700; }
+  .no-src { font-size: 11px; color: var(--muted); margin-top: 8px; }
+
+  /* 待機中 */
+  .typing { display: flex; align-items: center; gap: 8px; color: var(--green); font-size: 13px; font-weight: 700; }
+  .dots { display: inline-flex; gap: 4px; }
+  .dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: blink 1.4s infinite ease-in-out both; }
+  .dots i:nth-child(1) { animation-delay: -0.32s; }
+  .dots i:nth-child(2) { animation-delay: -0.16s; }
+  @keyframes blink { 0%, 80%, 100% { transform: scale(0); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; } }
+  .retry { margin-top: 10px; border: 1.5px solid var(--danger); background: var(--surface); color: var(--danger); border-radius: 20px; padding: 6px 16px; cursor: pointer; font-size: 13px; font-weight: 700; }
+  .retry:hover { background: var(--danger-soft); }
+
+  /* ===== 入力欄 ===== */
+  .composer-wrap { padding: 12px 16px; border-top: 1px solid var(--line); background: var(--surface); box-shadow: 0 -2px 10px rgba(0,0,0,0.02); z-index: 10; }
+  form#composer { display: flex; gap: 10px; align-items: flex-end; background: #f5f5f5; border: 2px solid transparent; border-radius: 24px; padding: 6px 6px 6px 16px; transition: .2s; }
+  form#composer:focus-within { border-color: var(--green); background: var(--surface); box-shadow: 0 4px 12px rgba(104,159,56,0.1); }
+  textarea#input { flex: 1; resize: none; border: none; outline: none; background: transparent; font: inherit; line-height: 1.5; padding: 10px 0; max-height: 120px; min-height: 42px; color: var(--ink); font-size: 15px; }
+  textarea#input::placeholder { color: #9e9e9e; font-weight: 500; }
+  button#send { width: 42px; height: 42px; flex-shrink: 0; border: none; border-radius: 50%; background: var(--green); color: #fff; cursor: pointer; display: grid; place-items: center; transition: .2s; box-shadow: 0 2px 6px rgba(104,159,56,0.3); }
+  button#send:hover:not(:disabled) { background: var(--green-2); transform: scale(1.05); }
+  button#send:disabled { background: #e0e0e0; box-shadow: none; cursor: default; color: #9e9e9e; }
+  button#send svg { width: 20px; height: 20px; position: relative; left: -1px; }
+  .composer-foot { display: flex; justify-content: space-between; gap: 10px; margin-top: 8px; font-size: 10.5px; color: var(--muted); padding: 0 4px; font-weight: 500; }
+  #counter.over { color: var(--danger); font-weight: 700; }
+
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand-icon"><img class="chara-img" data-kind="face" src="img/fairy-face.png" alt=""></div>
+    <div class="brand"><h1>とうじょうRMO</h1></div>
+    <button type="button" class="btn-line" id="clear" aria-label="最初から">最初から</button>
+  </header>
+
+  <main id="chat" aria-live="polite"></main>
+
+  <div class="composer-wrap">
+    <form id="composer" autocomplete="off">
+      <label for="input" class="sr-only">質問を入力してね</label>
+      <textarea id="input" rows="1" maxlength="1200" placeholder="質問を入力してね！"></textarea>
+      <button type="submit" id="send" aria-label="送信" disabled>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </form>
+    <div class="composer-foot">
+      <span>※AIの妖精がお答えするよ！くわしいことは事務局に聞いてね。</span>
+      <span id="counter"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ===== 設定 =====
+  var GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwyNSdhkTZ5b8HCTXBGhIHOaYQrvg8vyohEws7m7rbP_wbyLkz_--m5tJbaSujH2G5dzw/exec';
+  var IMG_BASE = 'img/';           
+  var CHARA_ALT = 'RMOの妖精';
+  var MAX_CHARS = 1000;            
+  var MAX_HISTORY_TURNS = 6;
