@@ -231,22 +231,24 @@ header {
 .view-chat header { padding: 12px 18px; background: rgba(255,255,255,.95); z-index: 20; }
 .header-brand { display: flex; align-items: center; gap: 12px; }
 .brand-icon {
-  width: 40px; height: 40px; border-radius: 12px; background: var(--gray);
+  width: 40px; height: 40px; border-radius: 50%; background: var(--gray);
   border: 1px solid var(--line); overflow: hidden; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
 }
-.brand-icon img { width: 100%; height: 100%; object-fit: cover; }
+.brand-icon img { width: 100%; height: 100%; object-fit: cover; object-position: center center; display: block; }
 #chat { flex: 1; overflow-y: auto; padding: 18px 16px; scroll-behavior: smooth; background: var(--gray); }
 .msg { display: flex; gap: 10px; margin: 16px 0; align-items: flex-start; }
 .msg.user { justify-content: flex-end; }
 .avatar {
-  width: 36px; height: 36px; border-radius: 10px; overflow: hidden; flex-shrink: 0;
+  width: 36px; height: 36px; border-radius: 50%; overflow: hidden; flex-shrink: 0;
   background: var(--white); border: 1px solid var(--line);
   display: flex; align-items: center; justify-content: center;
+  transform-origin: 50% 50%;
 }
-.avatar img { width: 100%; height: 100%; object-fit: cover; }
-.avatar.thinking img { animation: think 1.2s ease-in-out infinite; transform-origin: 50% 80%; }
-@keyframes think { 0%,100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg) translateY(-2px); } }
+.avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center center; display: block; }
+/* 生成中：画像ではなく円形の枠ごと揺らす（端が切れない） */
+.avatar.thinking { animation: think 1.2s ease-in-out infinite; }
+@keyframes think { 0%,100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg) translateY(-2px); } }
 .bot-col { flex: 1; min-width: 0; }
 .bubble { border-radius: 14px; padding: 13px 17px; word-wrap: break-word; overflow-wrap: anywhere; font-size: .92rem; line-height: 1.8; }
 .user .bubble {
@@ -276,19 +278,6 @@ header {
 .meta button { border: 1px solid var(--line); background: var(--white); color: var(--ink-soft); cursor: pointer; font-size: .72rem; padding: 3px 10px; border-radius: 12px; transition: all .2s var(--ease); }
 .meta button:hover { border-color: var(--green); color: var(--green); background: var(--gray); }
 .notice { font-size: .8rem; color: var(--ink-soft); background: var(--gray); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; margin-top: 10px; }
-details.sources { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 8px; }
-details.sources summary { cursor: pointer; font-size: .76rem; color: var(--green); list-style: none; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-weight: 600; user-select: none; }
-details.sources summary::-webkit-details-marker { display: none; }
-.src-label { display: inline-flex; align-items: center; background: var(--gray); padding: 2px 8px; border-radius: 6px; font-size: .74rem; }
-.src-label::before { content: "＋ "; }
-details.sources[open] .src-label::before { content: "－ "; }
-.doc-tag { border: 1px solid var(--line); border-radius: 6px; padding: 1px 8px; font-size: .72rem; background: var(--white); color: var(--ink-soft); font-weight: 400; }
-.src { margin-top: 8px; background: var(--gray); border-radius: 8px; padding: 10px 12px; border: 1px solid var(--line); }
-.src-title { font-weight: 700; font-size: .8rem; color: var(--green-deep); }
-.src-title a { color: var(--green); margin-left: 8px; font-weight: 600; text-decoration: underline; }
-.excerpt { margin: 6px 0 0; padding: 6px 10px; border-left: 2px solid var(--green); background: var(--white); font-size: .78rem; color: var(--ink-soft); white-space: pre-wrap; max-height: 5.6em; overflow: hidden; border-radius: 0 4px 4px 0; }
-.excerpt.expanded { max-height: none; }
-.more { border: none; background: none; color: var(--green); font-size: .72rem; cursor: pointer; padding-top: 4px; font-weight: 600; }
 .typing { display: flex; align-items: center; gap: 8px; color: var(--green); font-size: .85rem; font-weight: 600; }
 .retry { margin-top: 8px; border: 1px solid var(--danger); background: var(--white); color: var(--danger); border-radius: 20px; padding: 5px 14px; cursor: pointer; font-size: .8rem; font-weight: 600; transition: all .2s var(--ease); }
 .retry:hover { background: var(--danger); color: #fff; }
@@ -496,9 +485,6 @@ details.sources[open] .src-label::before { content: "－ "; }
     }
     return html;
   }
-  function safeHttpsUrl(u) {
-    return (typeof u === 'string' && /^https:\/\/[^\s"'<>]+$/.test(u)) ? u : '';
-  }
   function el(tag, cls, text) {
     var e = document.createElement(tag);
     if (cls) e.className = cls;
@@ -632,47 +618,12 @@ details.sources[open] .src-label::before { content: "－ "; }
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fallback);
     else fallback();
   }
-  function renderSources(container, sources) {
-    if (!sources || !sources.length) return;
-    var det = el('details', 'sources');
-    var sum = el('summary');
-    sum.appendChild(el('span', 'src-label', '参考にした資料'));
-    sources.forEach(function (s) { sum.appendChild(el('span', 'doc-tag', s.doc)); });
-    det.appendChild(sum);
-    sources.forEach(function (s) {
-      var box = el('div', 'src');
-      var title = el('div', 'src-title', s.doc);
-      var url = safeHttpsUrl(s.url);
-      if (url) {
-        var a = el('a', null, 'リンクを見る →');
-        a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer';
-        title.appendChild(a);
-      }
-      box.appendChild(title);
-      (s.excerpts || []).forEach(function (x) {
-        var q = el('blockquote', 'excerpt', x);
-        box.appendChild(q);
-        if (x.length > 90) {
-          var more = el('button', 'more', '続きを表示 ▼');
-          more.type = 'button';
-          more.addEventListener('click', function () {
-            var open = q.classList.toggle('expanded');
-            more.textContent = open ? '折りたたむ ▲' : '続きを表示 ▼';
-          });
-          box.appendChild(more);
-        }
-      });
-      det.appendChild(box);
-    });
-    container.appendChild(det);
-  }
   function addBotAnswer(res) {
     var r = botRow();
     var body = el('div', 'md');
     body.innerHTML = renderMarkdown(res.answer);
     r.bubble.appendChild(body);
     if (res.truncated) r.bubble.appendChild(el('div', 'notice', '※ 文章が長いため途中で終了しました。質問を分けて試してみてね。'));
-    renderSources(r.bubble, res.sources);
     var meta = el('div', 'meta');
     if (res.elapsedMs) meta.appendChild(el('span', null, (res.elapsedMs / 1000).toFixed(1) + 's'));
     meta.appendChild(el('span', 'spacer'));
