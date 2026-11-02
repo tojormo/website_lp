@@ -4,10 +4,12 @@
 <base target="_top">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#ffffff">
+<meta name="format-detection" content="telephone=no">
 <title>とうじょうRMO チャットアシスタント</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* =========================================================
    とうじょうRMO チャットアシスタント
@@ -38,14 +40,22 @@ html, body {
   color: var(--ink);
   line-height: 1.8;
   -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   touch-action: manipulation;
   overflow: hidden;
+  overscroll-behavior: none;
 }
-button, input, textarea { font-family: inherit; }
+button, input, textarea { font-family: inherit; -webkit-tap-highlight-color: transparent; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* ---------- 画面切り替え ---------- */
-.shell { position: relative; height: 100vh; height: 100dvh; overflow: hidden; }
+/* iOS Safari：キーボード表示時も入力欄が隠れないよう、見えている領域（visualViewport）の高さに合わせる */
+.shell {
+  position: fixed; left: 0; right: 0; top: 0;
+  height: 100vh; height: 100dvh; height: var(--app-h, 100dvh);
+  overflow: hidden;
+}
 .view {
   position: absolute; top: 0; bottom: 0; left: 0; right: 0;
   margin: 0 auto;
@@ -75,7 +85,11 @@ header {
   border-radius: 20px; padding: 6px 14px; font-size: .78rem; font-weight: 500;
   cursor: pointer; transition: all .25s var(--ease);
 }
-.btn-pill:hover { border-color: var(--green); color: var(--green); background: var(--gray); }
+.btn-pill { min-height: 36px; }
+@media (hover: hover) {
+  .btn-pill:hover { border-color: var(--green); color: var(--green); background: var(--gray); }
+}
+.btn-pill:active { border-color: var(--green); color: var(--green); background: var(--gray); }
 
 /* ---------- 共通：入力エリア ---------- */
 .composer {
@@ -87,7 +101,9 @@ header {
 .composer textarea {
   flex: 1; resize: none; border: none; outline: none; background: transparent;
   font: inherit; line-height: 1.5; padding: 9px 0; max-height: 120px; min-height: 40px;
-  color: var(--ink); font-size: .94rem;
+  color: var(--ink);
+  font-size: 16px; /* 16px未満だとiPhoneでフォーカス時に画面がズームする */
+  -webkit-appearance: none; appearance: none; border-radius: 0;
 }
 .composer textarea::placeholder { color: var(--ink-soft); opacity: .7; }
 .send-btn {
@@ -95,9 +111,13 @@ header {
   background: var(--green); color: #fff; cursor: pointer; display: grid; place-items: center;
   transition: all .25s var(--ease);
 }
-.send-btn:hover:not(:disabled) { background: var(--green-deep); transform: translateY(-1px); }
+@media (hover: hover) {
+  .send-btn:hover:not(:disabled) { background: var(--green-deep); transform: translateY(-1px); }
+}
+.send-btn:active:not(:disabled) { background: var(--green-deep); transform: scale(.94); }
 .send-btn:disabled { background: var(--line) !important; color: #aab0aa !important; cursor: default !important; transform: none !important; }
 .send-btn svg { width: 17px; height: 17px; transform: translateX(1px); }
+.send-btn { width: 40px; height: 40px; }
 .composer-foot { display: flex; justify-content: space-between; gap: 8px; margin-top: 6px; font-size: .68rem; color: var(--ink-soft); padding: 0 4px; }
 .counter.over { color: var(--danger); font-weight: 700; }
 
@@ -209,20 +229,22 @@ header {
 @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px) rotate(-3deg); } 75% { transform: translateX(6px) rotate(3deg); } }
 .view-intro .chips-bar { background: var(--white); border-top: 1px solid var(--line); padding: 10px 0 2px; }
 .view-intro .chips-title { font-size: .68rem; color: var(--ink-soft); padding: 0 18px 4px; font-weight: 600; letter-spacing: .04em; }
+/* 質問候補：横スクロールで隠れないよう折り返して全部見せる */
 .view-intro .chips {
-  display: flex; gap: 8px; overflow-x: auto; padding: 2px 16px 8px;
-  scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 2px 16px 8px;
 }
-.view-intro .chips::-webkit-scrollbar { display: none; }
 .view-intro .chip {
   flex-shrink: 0; background: var(--white); border: 1px solid var(--green-light);
-  border-radius: 20px; padding: 6px 14px; font-size: .82rem; font-weight: 500; color: var(--green-deep);
-  cursor: pointer; transition: all .25s var(--ease); white-space: nowrap;
+  border-radius: 20px; padding: 6px 14px; min-height: 36px; font-size: .82rem; font-weight: 500; color: var(--green-deep);
+  cursor: pointer; transition: all .25s var(--ease); white-space: nowrap; line-height: 1.5;
 }
-.view-intro .chip:hover { background: var(--green); border-color: var(--green); color: #fff; }
+@media (hover: hover) {
+  .view-intro .chip:hover { background: var(--green); border-color: var(--green); color: #fff; }
+}
+.view-intro .chip:active { background: var(--green); border-color: var(--green); color: #fff; }
 .view-intro .chip:disabled { opacity: .45; cursor: default; background: var(--white); color: var(--green-deep); border-color: var(--line); }
 .view-intro .composer-wrap { padding: 6px 16px calc(12px + env(safe-area-inset-bottom)); background: var(--white); z-index: 20; }
-@media (max-height: 640px) { :root { --chara-h: clamp(120px, 28dvh, 220px); } }
+@media (max-height: 640px) { :root { --chara-h: clamp(110px, 26dvh, 180px); } }
 
 /* =========================================================
    ② 会話開始後：チャット画面（bot.html）
@@ -276,12 +298,153 @@ header {
 .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; font-size: .72rem; color: var(--ink-soft); font-family: "Inter",sans-serif; }
 .meta .spacer { flex: 1; }
 .meta button { border: 1px solid var(--line); background: var(--white); color: var(--ink-soft); cursor: pointer; font-size: .72rem; padding: 3px 10px; border-radius: 12px; transition: all .2s var(--ease); }
-.meta button:hover { border-color: var(--green); color: var(--green); background: var(--gray); }
+.meta button { min-height: 30px; padding: 4px 14px; }
+@media (hover: hover) {
+  .meta button:hover { border-color: var(--green); color: var(--green); background: var(--gray); }
+}
+.meta button:active { border-color: var(--green); color: var(--green); background: var(--gray); }
 .notice { font-size: .8rem; color: var(--ink-soft); background: var(--gray); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; margin-top: 10px; }
 .typing { display: flex; align-items: center; gap: 8px; color: var(--green); font-size: .85rem; font-weight: 600; }
 .retry { margin-top: 8px; border: 1px solid var(--danger); background: var(--white); color: var(--danger); border-radius: 20px; padding: 5px 14px; cursor: pointer; font-size: .8rem; font-weight: 600; transition: all .2s var(--ease); }
-.retry:hover { background: var(--danger); color: #fff; }
+.retry { min-height: 36px; }
+@media (hover: hover) { .retry:hover { background: var(--danger); color: #fff; } }
+.retry:active { background: var(--danger); color: #fff; }
 .view-chat .composer-wrap { padding: 10px 16px calc(14px + env(safe-area-inset-bottom)); background: var(--white); border-top: 1px solid var(--line); z-index: 20; }
+
+/* =========================================================
+   ④ テーマ：ポップ＆やわらか
+   ========================================================= */
+:root {
+  --mint: #e3f3e7;
+  --mint-2: #f2faf4;
+  --leaf: #5fb877;
+  --sun: #ffd76a;
+  --grad: linear-gradient(135deg, #43a35f 0%, #2f7a43 100%);
+  --round: "Zen Maru Gothic", "Noto Sans JP", sans-serif;
+  --shadow-soft: 0 8px 24px -10px rgba(36,94,52,.22);
+  --shadow-pop: 0 12px 30px -12px rgba(36,94,52,.35);
+}
+html, body { background: var(--mint-2); }
+.view { box-shadow: 0 0 60px rgba(36,94,52,.08); }
+
+/* ヘッダー：白いガラス＋丸ゴシックのロゴ */
+header { background: rgba(255,255,255,.82) !important; border-bottom: none; box-shadow: 0 1px 0 rgba(36,94,52,.06), 0 6px 18px -14px rgba(36,94,52,.4); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.view-intro header { justify-content: flex-start; }
+.logo-text strong { font-family: var(--round); font-weight: 900; font-size: 1.12rem; letter-spacing: .05em; }
+.logo-text small { display: inline-flex; align-items: center; gap: 5px; font-family: var(--round); font-weight: 700; font-size: .66rem; letter-spacing: .06em; color: var(--leaf); }
+.logo-text small::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--leaf); box-shadow: 0 0 0 3px rgba(95,184,119,.2); }
+.brand-icon { background: var(--mint); border: 2px solid #fff; box-shadow: 0 0 0 2px var(--green-light), var(--shadow-soft); }
+.btn-pill { font-family: var(--round); font-weight: 700; border: none; background: var(--mint); color: var(--green-deep); }
+.btn-pill:active { background: var(--green-light); color: var(--green-deep); }
+@media (hover: hover) { .btn-pill:hover { background: var(--green-light); color: var(--green-deep); } }
+
+/* 起動画面：ふんわり背景＋まるい水玉 */
+.stage {
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255,215,106,.28) 0 38px, transparent 39px),
+    radial-gradient(circle at 90% 30%, rgba(158,212,171,.40) 0 54px, transparent 55px),
+    radial-gradient(circle at 80% 88%, rgba(158,212,171,.30) 0 70px, transparent 71px),
+    radial-gradient(ellipse 80% 40% at 50% 100%, rgba(95,184,119,.30), transparent 70%),
+    linear-gradient(180deg, #f7fcf8 0%, var(--mint) 100%);
+}
+.leaf { background: var(--leaf); opacity: .5; }
+.balloon { border: none; border-radius: 28px; box-shadow: 0 0 0 3px rgba(158,212,171,.55), var(--shadow-pop); }
+.balloon::before { display: none; }
+.balloon::after { bottom: -11px; border-width: 12px 11px 0; filter: drop-shadow(0 3px 0 rgba(158,212,171,.55)); }
+.balloon.error { box-shadow: 0 0 0 3px #f6c8c8, var(--shadow-soft); }
+.speaker { font-family: var(--round); font-size: .72rem; padding: 3px 14px; background: var(--grad); box-shadow: 0 4px 10px -4px rgba(36,94,52,.5); top: -13px; }
+.greet { font-family: var(--round); font-weight: 900; color: var(--green-deep); letter-spacing: .02em; }
+.greet-sub { font-family: var(--round); font-weight: 500; }
+.nameplate { font-family: var(--round); font-weight: 700; border: none; background: #fff; box-shadow: var(--shadow-soft); padding: 2px 14px; }
+.chara-shadow { background: rgba(36,94,52,.20); }
+
+/* 質問候補：ころんとしたミントのボタン */
+.view-intro .stage { padding-bottom: 22px; }
+.kb-open .view-intro .stage { padding-bottom: 12px; }
+.view-intro .chips-bar { border-top: none; background: #fff; border-radius: 24px 24px 0 0; margin-top: -18px; position: relative; z-index: 10; padding-top: 14px; box-shadow: 0 -8px 20px -14px rgba(36,94,52,.35); }
+.view-intro .chip { font-family: var(--round); font-weight: 700; border: none; background: var(--mint); color: var(--green-deep); box-shadow: inset 0 -2px 0 rgba(36,94,52,.10); }
+.view-intro .chip:active { background: var(--green); color: #fff; transform: translateY(1px); box-shadow: none; }
+@media (hover: hover) { .view-intro .chip:hover { background: var(--green); color: #fff; } }
+.view-intro .chip:disabled { background: var(--gray2); color: var(--ink-soft); box-shadow: none; }
+
+/* 入力欄：白く浮いたカプセル＋グラデーション送信ボタン */
+.composer { background: #fff; border: 2px solid var(--mint); border-radius: 999px; box-shadow: var(--shadow-soft); }
+.composer:focus-within { border-color: var(--green-light); box-shadow: 0 0 0 4px rgba(158,212,171,.25), var(--shadow-soft); }
+.send-btn { background: var(--grad); box-shadow: 0 6px 14px -6px rgba(36,94,52,.6); }
+.send-btn:disabled { box-shadow: none; }
+.composer-foot { justify-content: center; text-align: center; }
+.view-chat .composer-wrap { border-top: none; background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #fff 30%); margin-top: -16px; padding-top: 18px; position: relative; }
+
+/* チャット画面 */
+#chat {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(158,212,171,.25) 0 90px, transparent 91px),
+    radial-gradient(circle at 0% 70%, rgba(255,215,106,.14) 0 70px, transparent 71px),
+    var(--mint-2);
+  background-attachment: local;
+}
+.avatar { border: 2px solid #fff; background: var(--mint); box-shadow: 0 0 0 2px var(--green-light); }
+.bubble { border-radius: 22px; }
+.bot .bubble { border: none; border-top-left-radius: 6px; box-shadow: var(--shadow-soft); }
+.user .bubble { background: var(--grad); border-top-right-radius: 6px; box-shadow: 0 8px 18px -10px rgba(36,94,52,.7); }
+.bot.error .bubble { box-shadow: 0 0 0 2px #f6c8c8; }
+.md .h { font-family: var(--round); font-weight: 900; }
+.md .h::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--leaf); margin-right: 6px; vertical-align: .12em; }
+.md blockquote { background: var(--mint-2); border-left-color: var(--leaf); border-radius: 0 12px 12px 0; }
+.md code { background: var(--mint-2); border-color: var(--mint); }
+.table-wrap { border: none; border-radius: 12px; box-shadow: 0 0 0 1px var(--mint); }
+.md th { background: var(--mint); font-family: var(--round); }
+.meta button { font-family: var(--round); font-weight: 700; border: none; background: var(--mint); color: var(--green-deep); }
+.notice { background: #fff8e1; border-color: #ffe6a3; color: #7a5d12; border-radius: 12px; }
+.typing { font-family: var(--round); font-weight: 700; }
+.dots i { background: var(--leaf); width: 6px; height: 6px; }
+.retry { font-family: var(--round); border-radius: 999px; }
+
+/* =========================================================
+   ③ スマホ（iPhone SE 第3世代 = 幅375px）向け調整
+   ========================================================= */
+@media (max-width: 420px) {
+  /* 起動画面 */
+  .view-intro header { padding: 8px 14px; }
+  .stage { padding: 12px 14px 0; }
+  .balloon { border-radius: 18px; }
+  .balloon-scroll { padding: 14px 16px 12px; }
+  .speaker { left: 14px; }
+  .greet { font-size: 1.05rem; line-height: 1.55; }
+  .greet-sub { font-size: .76rem; }
+  .chara-wrap { margin-top: 16px; }
+  .view-intro .chips-bar { padding: 8px 0 0; }
+  .view-intro .chips { gap: 6px; padding: 0 12px 8px; }
+  .view-intro .chip { padding: 5px 12px; font-size: .78rem; }
+  .view-intro .composer-wrap { padding: 4px 12px calc(8px + env(safe-area-inset-bottom)); }
+
+  /* チャット画面 */
+  .view-chat header { padding: 8px 12px; }
+  .header-brand { gap: 10px; }
+  .brand-icon { width: 34px; height: 34px; }
+  .btn-pill { padding: 6px 12px; }
+  #chat { padding: 6px 12px 14px; }
+  .msg { gap: 8px; margin: 12px 0; }
+  .avatar { width: 32px; height: 32px; }
+  .bubble { padding: 11px 14px; font-size: .9rem; line-height: 1.75; }
+  .user .bubble { max-width: 86%; }
+  .md ul, .md ol { padding-left: 1.25em; }
+  .md table { min-width: 280px; }
+  .md th, .md td { padding: 7px 10px; }
+  .view-chat .composer-wrap { padding: 8px 12px calc(8px + env(safe-area-inset-bottom)); }
+
+  .composer { padding: 3px 4px 3px 14px; }
+  .composer-foot { margin-top: 4px; font-size: .64rem; line-height: 1.5; }
+}
+
+/* キーボード表示中：入力と吹き出しを優先し、キャラ・注意書きは隠す */
+.kb-open .view-intro .chara-wrap,
+.kb-open .view-intro .leaf,
+.kb-open .view-intro .chips-bar,
+.kb-open .composer-foot { display: none; }
+.kb-open .stage { padding-bottom: 12px; }
+.kb-open .balloon::before, .kb-open .balloon::after { display: none; }
+.kb-open .composer-wrap { padding-bottom: 8px; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -294,8 +457,12 @@ header {
   <!-- ===================== ① 起動時：キャラクター画面 ===================== -->
   <div class="view view-intro" id="introView">
     <header>
-      <div class="logo-text">
-        <strong>とうじょうRMO</strong>
+      <div class="header-brand">
+        <div class="brand-icon" id="introBrandIcon"></div>
+        <div class="logo-text">
+          <strong>とうじょうRMO</strong>
+          <small>RMOの妖精がご案内</small>
+        </div>
       </div>
     </header>
     <main class="stage" id="stage">
@@ -318,7 +485,7 @@ header {
     <div class="composer-wrap">
       <form class="composer" id="introForm" autocomplete="off">
         <label for="introInput" class="sr-only">質問を入力</label>
-        <textarea id="introInput" rows="1" maxlength="1200" placeholder="妖精に話しかけてね"></textarea>
+        <textarea id="introInput" rows="1" maxlength="1200" enterkeyhint="send" placeholder="妖精に話しかけてね"></textarea>
         <button type="submit" class="send-btn" id="introSend" aria-label="送信">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -340,6 +507,7 @@ header {
         <div class="brand-icon" id="brandIcon"></div>
         <div class="logo-text">
           <strong>とうじょうRMO</strong>
+          <small>RMOの妖精がご案内</small>
         </div>
       </div>
       <button type="button" class="btn-pill" id="clear" aria-label="最初から"><span>↺</span> 最初から</button>
@@ -348,7 +516,7 @@ header {
     <div class="composer-wrap">
       <form class="composer" id="chatForm" autocomplete="off">
         <label for="chatInput" class="sr-only">質問を入力</label>
-        <textarea id="chatInput" rows="1" maxlength="1200" placeholder="質問を入力してね"></textarea>
+        <textarea id="chatInput" rows="1" maxlength="1200" enterkeyhint="send" placeholder="質問を入力してね"></textarea>
         <button type="submit" class="send-btn" id="chatSend" aria-label="送信">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -621,14 +789,6 @@ header {
     body.innerHTML = renderMarkdown(res.answer);
     r.bubble.appendChild(body);
     if (res.truncated) r.bubble.appendChild(el('div', 'notice', '※ 文章が長いため途中で終了しました。質問を分けて試してみてね。'));
-    var meta = el('div', 'meta');
-    if (res.elapsedMs) meta.appendChild(el('span', null, (res.elapsedMs / 1000).toFixed(1) + 's'));
-    meta.appendChild(el('span', 'spacer'));
-    var copy = el('button', null, 'コピー');
-    copy.type = 'button';
-    copy.addEventListener('click', function () { copyText(res.answer, copy); });
-    meta.appendChild(copy);
-    r.bubble.appendChild(meta);
     els.chat.appendChild(r.row);
     scrollToBottom();
   }
@@ -772,6 +932,35 @@ header {
     enterIntroMode();
   }
 
+  // ===== スマホ：表示領域とキーボード対応 =====
+  // iOS Safari はキーボード表示時に画面全体を押し上げるため、
+  // 見えている領域（visualViewport）の高さ・位置に合わせて画面を作り直す
+  var baseH = 0, lastW = 0;
+  function fitViewport() {
+    var vv = window.visualViewport;
+    var h = vv ? vv.height : window.innerHeight;
+    var w = vv ? vv.width : window.innerWidth;
+    if (w !== lastW) { baseH = 0; lastW = w; } // 回転したら基準をリセット
+    var focused = document.activeElement && document.activeElement.tagName === 'TEXTAREA';
+    if (!focused || h > baseH) baseH = Math.max(baseH, h);
+    var kb = focused && baseH - h > 120;
+    document.documentElement.style.setProperty('--app-h', Math.round(h) + 'px');
+    var shell = document.querySelector('.shell');
+    if (shell) shell.style.top = (vv ? Math.max(0, vv.offsetTop) : 0) + 'px';
+    var wasKb = document.body.classList.contains('kb-open');
+    document.body.classList.toggle('kb-open', kb);
+    if (kb !== wasKb && state.mode === 'chat' && els.chat) setTimeout(scrollToBottom, 60);
+  }
+  function bindViewport() {
+    var vv = window.visualViewport;
+    if (vv) { vv.addEventListener('resize', fitViewport); vv.addEventListener('scroll', fitViewport); }
+    window.addEventListener('resize', fitViewport);
+    window.addEventListener('orientationchange', function () { setTimeout(fitViewport, 300); });
+    document.addEventListener('focusin', function () { setTimeout(fitViewport, 50); setTimeout(fitViewport, 350); });
+    document.addEventListener('focusout', function () { setTimeout(fitViewport, 50); setTimeout(fitViewport, 350); });
+    fitViewport();
+  }
+
   // ===== 初期化 =====
   function init() {
     els.introView = document.getElementById('introView');
@@ -791,10 +980,12 @@ header {
     body.appendChild(charaImg('full', CHARA_ALT));
     body.addEventListener('click', pokeChara);
     document.getElementById('brandIcon').appendChild(charaImg('face', ''));
+    document.getElementById('introBrandIcon').appendChild(charaImg('face', ''));
 
     renderIntroChips();
     renderIntroWelcome();
     document.getElementById('clear').addEventListener('click', resetChat);
+    bindViewport();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
