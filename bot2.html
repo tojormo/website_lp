@@ -14,7 +14,7 @@
 /* =========================================================
    とうじょうRMO 妖精とおはなし（ゲームUI版 / bot2.html）
    - キャラを大きく表示し、ノベルゲーム風の会話ウィンドウで返答
-   - 選択肢ボタン / なかよし度ゲージ / 会話ログ
+   - 選択肢ボタン（最初のみ） / 会話ログ
    ========================================================= */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
@@ -87,15 +87,7 @@ button { cursor: pointer; }
 .status-face img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .status-body { min-width: 0; }
 .status-name { font-family: var(--round); font-weight: 900; font-size: .8rem; color: var(--green-deep); line-height: 1.2; white-space: nowrap; }
-.status-name .lv { font-family: var(--game); font-weight: 400; font-size: .72rem; color: #fff; background: var(--grad);
-  border-radius: 6px; padding: 0 5px; margin-left: 4px; letter-spacing: .04em; }
-.gauge-row { display: flex; align-items: center; gap: 5px; margin-top: 3px; }
-.gauge-row .heart { width: 12px; height: 12px; color: var(--pink); flex-shrink: 0; }
-.gauge { position: relative; width: 92px; height: 8px; border-radius: 8px; background: #f1e6ea; overflow: hidden;
-  box-shadow: inset 0 1px 2px rgba(0,0,0,.12); }
-.gauge i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 8px;
-  background: linear-gradient(90deg, #ffa7bd, var(--pink)); transition: width .8s var(--pop); }
-.gauge-label { font-family: var(--round); font-weight: 700; font-size: .6rem; color: var(--ink-soft); white-space: nowrap; }
+.status-sub { font-family: var(--round); font-weight: 700; font-size: .64rem; color: var(--leaf); line-height: 1.3; margin-top: 1px; }
 .hud-btns { display: flex; gap: 8px; flex-shrink: 0; }
 .icon-btn {
   width: 44px; height: 48px; border: 2px solid #fff; border-radius: 14px;
@@ -138,14 +130,6 @@ button { cursor: pointer; }
 .dots i:nth-child(2) { animation-delay: -.16s; }
 @keyframes blink { 0%,80%,100% { transform: scale(.3); opacity: .3; } 40% { transform: scale(1); opacity: 1; } }
 @keyframes popIn { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-/* なかよし度UP 演出 */
-.toast { position: absolute; left: 50%; top: 30%; z-index: 30; transform: translateX(-50%); pointer-events: none;
-  font-family: var(--game); font-size: 1.15rem; color: #fff; letter-spacing: .04em; white-space: nowrap;
-  -webkit-text-stroke: 5px var(--pink); paint-order: stroke fill; text-shadow: 0 4px 0 rgba(180,40,80,.35);
-  animation: toastUp 1.6s var(--ease) forwards; }
-.toast.lvup { -webkit-text-stroke-color: #f0a300; text-shadow: 0 4px 0 rgba(160,100,0,.35); font-size: 1.4rem; }
-@keyframes toastUp { 0% { opacity: 0; transform: translate(-50%, 16px) scale(.6); } 18% { opacity: 1; transform: translate(-50%, 0) scale(1.08); }
-  30% { transform: translate(-50%, 0) scale(1); } 80% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -30px); } }
 
 /* ---------- 会話ウィンドウ（ノベルゲーム風） ---------- */
 .dialog-area { position: relative; z-index: 10; padding: 0 10px; }
@@ -214,12 +198,6 @@ button { cursor: pointer; }
 .choice:active { transform: translateY(4px); box-shadow: 0 0 0 var(--leaf); background: var(--mint); }
 @media (hover: hover) { .choice:hover { background: var(--mint); } }
 .choice:disabled { opacity: .5; }
-/* 回答後の選択肢：1行のコンパクト表示 */
-.choices.compact { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 10px -16px 0; padding: 0 16px 6px; }
-.choices.compact::-webkit-scrollbar { display: none; }
-.choices.compact .choice { flex-shrink: 0; white-space: nowrap; min-height: 36px; padding: 5px 12px 5px 22px; font-size: .76rem; border-radius: 999px; box-shadow: 0 3px 0 var(--leaf); }
-.choices.compact .choice::before { left: 9px; border-width: 4px 0 4px 7px; margin-top: -4px; }
-.choices.compact[hidden] { display: none; }
 @keyframes choiceIn { from { opacity: 0; transform: translateY(8px) scale(.96); } to { opacity: 1; transform: none; } }
 .retry { margin-top: 10px; border: 2px solid var(--danger); background: #fff; color: var(--danger); border-radius: 999px;
   padding: 6px 16px; min-height: 40px; font-family: var(--round); font-weight: 900; font-size: .82rem; box-shadow: 0 3px 0 #f19a9b; }
@@ -302,12 +280,8 @@ button { cursor: pointer; }
     <div class="status">
       <div class="status-face" id="statusFace"></div>
       <div class="status-body">
-        <div class="status-name">RMOの妖精<span class="lv" id="lv">Lv.1</span></div>
-        <div class="gauge-row">
-          <svg class="heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.1 4.4 2.4h1.8c.8-1.3 2.3-2.4 4.4-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>
-          <div class="gauge" role="progressbar" aria-label="なかよし度" aria-valuemin="0" aria-valuemax="100" id="gauge"><i id="gaugeFill"></i></div>
-          <span class="gauge-label">なかよし度</span>
-        </div>
+        <div class="status-name">RMOの妖精</div>
+        <div class="status-sub">とうじょうRMO</div>
       </div>
     </div>
     <div class="hud-btns">
@@ -387,9 +361,8 @@ button { cursor: pointer; }
     '気になることがあったら、下から話しかけてね！',
     '山田錦って知ってる？酒米なんだ！'
   ];
-  var XP_PER_LEVEL = 3;   // 何回質問するとレベルアップするか
 
-  var state = { history: [], log: [], busy: false, asked: {}, xp: 0, typing: null };
+  var state = { history: [], log: [], busy: false, typing: null };
   var els = {};
   var HAS_GAS = typeof google !== 'undefined' && google.script && google.script.run;
 
@@ -550,9 +523,8 @@ button { cursor: pointer; }
     els.playerLine.hidden = false;
     var s = els.playerText; s.style.animation = 'none'; void s.offsetWidth; s.style.animation = '';
   }
-  function renderChoices(list, compact) {
+  function renderChoices(list) {
     els.choices.innerHTML = '';
-    els.choices.classList.toggle('compact', !!compact);
     if (!list || !list.length) { els.choices.hidden = true; return; }
     list.forEach(function (q) {
       var c = el('button', 'choice', q);
@@ -562,9 +534,6 @@ button { cursor: pointer; }
       els.choices.appendChild(c);
     });
     els.choices.hidden = false;
-  }
-  function unaskedExamples(max) {
-    return EXAMPLES.filter(function (q) { return !state.asked[q]; }).slice(0, max);
   }
   function showWelcome() {
     setDialogError(false);
@@ -601,7 +570,7 @@ button { cursor: pointer; }
     els.dialogScroll.scrollTop = 0;
     var html = '<div class="md">' + renderMarkdown(res.answer) + '</div>';
     if (res.truncated) html += '<div class="notice">※ 文章が長いため途中で終了しました。質問を分けて試してみてね。</div>';
-    typeInto(els.dialogScroll, html, function () { renderChoices(unaskedExamples(4), true); });
+    typeInto(els.dialogScroll, html);   // 2ターン目以降は選択肢を出さない
   }
   function showError(message, retryQuestion) {
     setDialogError(true);
@@ -625,31 +594,9 @@ button { cursor: pointer; }
     renderChoices([]);
     var line = POKE_LINES[Math.floor(Math.random() * POKE_LINES.length)];
     typeInto(els.dialogScroll, '<p class="greet">' + esc(line) + '</p>', function () {
-      if (state.log.length) renderChoices(unaskedExamples(4), true); else renderChoices(EXAMPLES);
+      if (!state.log.length) renderChoices(EXAMPLES);
     });
     setMood('happy', 1100);
-  }
-
-  // ===== なかよし度 =====
-  function loadXp() { try { state.xp = parseInt(localStorage.getItem('rmo_bond_xp'), 10) || 0; } catch (e) { } }
-  function saveXp() { try { localStorage.setItem('rmo_bond_xp', String(state.xp)); } catch (e) { } }
-  function renderBond() {
-    var lv = Math.floor(state.xp / XP_PER_LEVEL) + 1;
-    var pct = Math.round((state.xp % XP_PER_LEVEL) / XP_PER_LEVEL * 100);
-    els.lv.textContent = 'Lv.' + lv;
-    els.gaugeFill.style.width = Math.max(pct, 4) + '%';
-    els.gauge.setAttribute('aria-valuenow', pct);
-  }
-  function toast(text, cls) {
-    var t = el('div', 'toast' + (cls ? ' ' + cls : ''), text);
-    els.game.appendChild(t);
-    setTimeout(function () { t.remove(); }, 1700);
-  }
-  function gainBond() {
-    var before = Math.floor(state.xp / XP_PER_LEVEL);
-    state.xp++; saveXp(); renderBond();
-    if (Math.floor(state.xp / XP_PER_LEVEL) > before) { toast('なかよし Lv.UP!', 'lvup'); setMood('happy', 1200); }
-    else toast('なかよし度 UP!');
   }
 
   // ===== 会話ログ =====
@@ -715,7 +662,6 @@ button { cursor: pointer; }
     var q = String(question || '').trim();
     if (!q || state.busy) return;
     if (q.length > MAX_CHARS) { showError('質問は ' + MAX_CHARS + ' 文字以内にしてね！'); return; }
-    state.asked[q] = true;
     showPlayerLine(q);
     if (!opts.retry) addLog('user', q);
     setBusy(true);
@@ -728,7 +674,6 @@ button { cursor: pointer; }
         addLog('bot', res.answer);
         state.history.push({ role: 'user', text: q }, { role: 'model', text: res.answer });
         state.history = state.history.slice(-MAX_HISTORY_TURNS * 2);
-        gainBond();
       } else {
         var retryable = res && ['BUSY', 'API', 'INTERNAL', 'EMPTY'].indexOf(res.code) >= 0;
         showError((res && res.error) || 'エラーが発生しました。', retryable ? q : null);
@@ -774,7 +719,7 @@ button { cursor: pointer; }
 
   function resetGame() {
     if (state.busy) return;
-    state.history = []; state.log = []; state.asked = {};
+    state.history = []; state.log = [];
     els.input.value = ''; autoGrow(); updateCounter();
     showWelcome();
   }
@@ -806,7 +751,7 @@ button { cursor: pointer; }
   // ===== 初期化 =====
   function init() {
     ['game', 'chara', 'dialog', 'nametag', 'dialogScroll', 'choices', 'playerLine', 'playerText', 'input', 'form', 'send',
-     'counter', 'lv', 'gauge', 'gaugeFill', 'log', 'logBody', 'logBtn', 'logClose', 'resetBtn', 'statusFace']
+     'counter', 'log', 'logBody', 'logBtn', 'logClose', 'resetBtn', 'statusFace']
       .forEach(function (id) { els[id] = document.getElementById(id); });
 
     els.chara.appendChild(charaImg('full', CHARA_ALT));
@@ -824,7 +769,6 @@ button { cursor: pointer; }
 
     bindComposer();
     bindViewport();
-    loadXp(); renderBond();
     showWelcome();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
