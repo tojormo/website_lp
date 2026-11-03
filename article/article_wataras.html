@@ -8,7 +8,7 @@
 
      ② 記事内画像（本文中に挿入する写真）
         ※本記事では画像指定がなかったため挿入していません。
-        必要に応じて <img src="img/ファイル名.jpg" alt="代替テキスト"> を追加してください。
+        必要に応じて <img src="img/ファイル名.jpg" loading="lazy" decoding="async" alt="代替テキスト"> を追加してください。
 ========================================================== -->
 <!DOCTYPE html>
 <html lang="ja">
@@ -17,8 +17,66 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>自動運転では農業は変わらない─「水位管理」が導くスマート農業の本質 ｜ とうじょうRMO</title>
 <meta name="description" content="兵庫県加東市岡本地区で進むスマート農業の実証。自動運転技術だけでは解決できない課題に対し、「水位管理」を軸にして農業と地方創生の未来を切り開く取り組みを解説します。">
+<link rel="canonical" href="https://tojormo.com/article/article_wataras.html">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:site_name" content="とうじょうRMO">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自動運転では農業は変わらない─「水位管理」が導くスマート農業の本質 ｜ とうじょうRMO">
+<meta property="og:description" content="兵庫県加東市岡本地区で進むスマート農業の実証。自動運転技術だけでは解決できない課題に対し、「水位管理」を軸にして農業と地方創生の未来を切り開く取り組みを解説します。">
+<meta property="og:url" content="https://tojormo.com/article/article_wataras.html">
+<meta property="og:image" content="https://tojormo.com/article/img/wataras.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "自動運転では農業は変わらない─「水位管理」が導くスマート農業の本質",
+      "description": "兵庫県加東市岡本地区で進むスマート農業の実証。自動運転技術だけでは解決できない課題に対し、「水位管理」を軸にして農業と地方創生の未来を切り開く取り組みを解説します。",
+      "image": [
+        "https://tojormo.com/article/img/wataras.jpg"
+      ],
+      "datePublished": "2025-10-22",
+      "dateModified": "2026-10-30",
+      "inLanguage": "ja",
+      "author": {
+        "@type": "Organization",
+        "name": "とうじょうRMO",
+        "url": "https://tojormo.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "とうじょうRMO",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://tojormo.com/images/favicon.png"
+        }
+      },
+      "mainEntityOfPage": "https://tojormo.com/article/article_wataras.html"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "HOME",
+          "item": "https://tojormo.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "自動運転では農業は変わらない─「水位管理」が導くスマート農業の本質",
+          "item": "https://tojormo.com/article/article_wataras.html"
+        }
+      ]
+    }
+  ]
+}
+</script>
 <meta name="description" content="農業DXの鍵となる「RTK」「VRS」技術。数センチの誤差をなくす自動操舵トラクターが、農作業の疲労軽減やコスト削減にもたらす5つの変化と、スマート農業が切り開く兵庫県加東市東条地域の未来を解説します。">
-<meta property="og:image" content="https://tojormo.com/articles/img/wataras.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -62,7 +120,7 @@
 
 <section class="page-hero">
   <img src="../images/hero3.jpg" alt="トラクターと農村風景">
-  <div class="wrap"><span class="eyebrow">Column</span><h1>コラム・活動報告</h1></div>
+  <div class="wrap"><span class="eyebrow">Column</span><p class="page-hero-title">コラム・活動報告</p></div>
 </section>
 
 <div class="crumbs">
@@ -88,7 +146,7 @@
       <h2>1. 自動運転だけでは、農業の課題は解決できない</h2>
       <p>GPSとビーコンを組み合わせた高精度測位技術により、トラクターやコンバインの自動運転は実現可能になった。農機メーカーの努力もあり、数センチ単位での制御が可能となっている。</p>
       
-      <img src="img/auto.jpg" alt="自動運転トラクター">
+      <img src="img/auto.jpg" loading="lazy" decoding="async" alt="自動運転トラクター">
 
       <p>だが、収穫の現場では、稲の倒れ具合、倒れる方向、湿気、土の柔らかさなど、目に見えない要素が作業効率に大きく影響する。コンバインが稲を詰まらせれば、作業は停止し、詰まりの解消は人の手作業に頼るしかない。</p>
 
@@ -99,7 +157,7 @@
       <h2>2. 「水位管理」こそ、スマート農業の本命</h2>
       <p>岡本営農互助会が注目したのは<strong>「水位管理」</strong>だ。</p>
       
-      <img src="img/wataras.jpg" alt="田んぼに設置された水位管理システム">
+      <img src="img/wataras.jpg" loading="lazy" decoding="async" alt="田んぼに設置された水位管理システム">
 
       <p>田んぼの水位は、稲の成長に直結する。水が不足すれば、雑草や粟が生え、稲の栄養分を奪う。特に岡本地区のように酒米の耕作に適した段々畑が多い地域では、上流のため池から下流の田んぼまで、効率的に水を配分する必要がある。</p>
 

@@ -13,6 +13,12 @@
    ・画像は images/ フォルダに置いてください。
    ・画像を差し替えたときは FAVICON_VER の数字を上げると、ブラウザの古い記憶を無視して再読込されます。 */
 const FAVICON_VER = '2';
+
+/* サイトのルートURL（common.js の場所を基準に算出）
+   → article/ など下の階層のページからでも、メニュー・フッター・アイコンのリンクが正しく効きます */
+const SITE_BASE = (function(){
+  try { return new URL('.', document.currentScript.src).href; } catch(e){ return '/'; }
+})();
 const FAVICONS = [
   { rel:'icon',             href:'images/favicon.ico', sizes:'any' },
   { rel:'icon',             href:'images/favicon.png', type:'image/png', sizes:'192x192' },
@@ -25,7 +31,7 @@ const FAVICONS = [
   head.querySelectorAll('link[rel~="icon"],link[rel="apple-touch-icon"]').forEach(l=>l.remove());
   FAVICONS.forEach(f=>{
     const link = document.createElement('link');
-    Object.entries(f).forEach(([k,v])=>link.setAttribute(k, k==='href' ? `${v}?v=${FAVICON_VER}` : v));
+    Object.entries(f).forEach(([k,v])=>link.setAttribute(k, k==='href' ? `${SITE_BASE}${v}?v=${FAVICON_VER}` : v));
     head.appendChild(link);
   });
 })();
@@ -34,14 +40,14 @@ const FAVICONS = [
 const HEADER_HTML = `
 <header id="hdr">
   <div class="wrap nav">
-    <a href="index.html" class="logo">とうじょうRMO<small>兵庫県加東市 東条地域</small></a>
+    <a href="${SITE_BASE}" class="logo">とうじょうRMO<small>兵庫県加東市 東条地域</small></a>
     <nav class="nav-links" id="navlinks">
-      <a href="index.html" data-nav="index.html">HOME</a>
-      <a href="about.html" data-nav="about.html">RMOとは</a>
-      <a href="solutions.html" data-nav="solutions.html">3つの目的</a>
-      <a href="challenges.html" data-nav="challenges.html">地域の課題</a>
-      <a href="index.html#news">お知らせ</a>
-      <a href="contact.html">お問合せ</a>
+      <a href="${SITE_BASE}" data-nav="index.html">HOME</a>
+      <a href="${SITE_BASE}about.html" data-nav="about.html">RMOとは</a>
+      <a href="${SITE_BASE}solutions.html" data-nav="solutions.html">3つの目的</a>
+      <a href="${SITE_BASE}challenges.html" data-nav="challenges.html">地域の課題</a>
+      <a href="${SITE_BASE}index.html#news">お知らせ</a>
+      <a href="${SITE_BASE}contact.html">お問合せ</a>
       <a href="https://lin.ee/p6sXYif" class="btn-nav btn-line" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.48 3 2 6.58 2 11c0 3.95 3.55 7.24 8.35 7.89.33.07.77.22.88.5.1.25.07.65.03.9l-.14.85c-.04.25-.2.98.86.53 1.06-.45 5.73-3.38 7.82-5.78C21.24 14.3 22 12.74 22 11c0-4.42-4.48-8-10-8z"/></svg>公式LINEで最新情報</a>
     </nav>
     <button class="burger" id="burger" aria-label="menu"><span></span><span></span><span></span></button>
@@ -60,10 +66,17 @@ const FOOTER_HTML = `
       <div class="foot-nav">
         <div class="foot-col">
           <h5>Contents</h5>
-          <a href="about.html">RMOとは</a>
-          <a href="solutions.html">3つの目的</a>
-          <a href="challenges.html">地域の課題</a>
-          <a href="contact.html">お問合せ</a>
+          <a href="${SITE_BASE}about.html">RMOとは</a>
+          <a href="${SITE_BASE}solutions.html">3つの目的</a>
+          <a href="${SITE_BASE}challenges.html">地域の課題</a>
+          <a href="${SITE_BASE}contact.html">お問合せ</a>
+        </div>
+        <div class="foot-col">
+          <h5>Column</h5>
+          <a href="${SITE_BASE}article/article_rmo.html">等身大の記録を残す理由</a>
+          <a href="${SITE_BASE}article/article_rtkvrs.html">RTK VRS “数センチの革命”</a>
+          <a href="${SITE_BASE}article/article_wataras.html">「水位管理」とスマート農業</a>
+          <a href="${SITE_BASE}article/article_yamadanishiki.html">山田錦を守る生存戦略</a>
         </div>
         <div class="foot-col">
           <h5>Links</h5>
