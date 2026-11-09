@@ -16,6 +16,9 @@ tojo-site/
 ├── style.css       … 全ページ共通スタイル
 ├── common.js       … 共通メニューバー・フッターの生成＋共通動作（メニュー等）
 ├── README.md       … このファイル
+├── 404.html        … ページが見つからないときの表示（GitHub Pages が自動で使用）
+├── article/        … コラム記事（article_*.html）
+│   └── images/     … 記事内の写真（jpg＝元画像、webp＝ページで使用 ※wataras は jpg を使用）
 └── images/
     ├── hero1.jpg / hero1.webp … ヒーロー画像①（jpg＝元画像、webp＝ページで使用）
     ├── hero2.jpg / hero2.webp … ヒーロー画像②（jpg＝元画像、webp＝ページで使用）
