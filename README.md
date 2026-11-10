@@ -16,13 +16,16 @@ tojo-site/
 ├── style.css       … 全ページ共通スタイル
 ├── common.js       … 共通メニューバー・フッターの生成＋共通動作（メニュー等）
 ├── README.md       … このファイル
+├── 404.html        … ページが見つからないときの表示（GitHub Pages が自動で使用）
+├── article/        … コラム記事（article_*.html）
+│   └── images/     … 記事内の写真（jpg＝元画像、webp＝ページで使用 ※wataras は jpg を使用）
 └── images/
-    ├── hero1.jpg … ヒーロー画像①
-    ├── hero2.jpg … ヒーロー画像②
-    ├── hero3.jpg … ヒーロー画像③
-    ├── hero4.jpg … ヒーロー画像④
-    ├── hero5.jpg … ヒーロー画像⑤
-    └── hero6.jpg … ヒーロー画像⑥
+    ├── hero1.jpg / hero1.webp … ヒーロー画像①（jpg＝元画像、webp＝ページで使用）
+    ├── hero2.jpg / hero2.webp … ヒーロー画像②（jpg＝元画像、webp＝ページで使用）
+    ├── hero3.jpg / hero3.webp … ヒーロー画像③（jpg＝元画像、webp＝ページで使用）
+    ├── hero4.jpg / hero4.webp … ヒーロー画像④（jpg＝元画像、webp＝ページで使用）
+    ├── hero5.jpg / hero5.webp … ヒーロー画像⑤（jpg＝元画像、webp＝ページで使用）
+    └── hero6.jpg / hero6.webp … ヒーロー画像⑥（jpg＝元画像、webp＝ページで使用）
 ```
 
 ## メニューバー・フッターの共通化について
@@ -71,7 +74,9 @@ tojo-site/
 
 ## ヒーロー画像の差し替え
 
-`images/` フォルダ内の `hero1.jpg` 〜 `hero6.jpg` を、**同じファイル名**で
+ページでは軽量な `images/hero1.webp` 〜 `hero6.webp` を表示しています（`hero*.jpg` は元画像として保管）。
+差し替えるときは、新しい画像を `hero1.jpg` 〜 `hero6.jpg` として保存し、WebP に変換して
+`hero1.webp` 〜 `hero6.webp` を**同じファイル名**で
 上書きすれば差し替わります。
 
 - 推奨サイズ：横 1600〜1920px 程度の横長画像
