@@ -106,11 +106,20 @@ tojo-site/
 `article_rmo.html` の画像は `images/hero6・hero3・hero2` をトリミングしたものです
 （`article/images/rmo-eyecatch`＝アイキャッチ、`rmo-machine`・`rmo-rice`＝本文、`rmo-ogp.jpg`＝SNS共有用 1200×630）。
 
-`article_yamadanishiki.html` では `ymd_sakagura` / `ymd_grain`（本文幅より広い写真＋重ねキャプション）、
-`ymd_sake`（写真を背景にした締めの引用パネル）を使っています。ほかの記事でも次のクラスで同じ演出ができます。
+各記事の画像は article_rmo と同じルールでそろえています。
 
-- `<figure class="column-figure is-wide is-overlay">` … 本文より広い写真＋写真上のキャプション（スマホでは写真の下に表示）
-- `<figure class="photo-quote">` … 写真を背景にした引用パネル
+- アイキャッチ・本文写真は **16:9** に切り出した専用画像を使い、本文写真は `<figure class="column-figure">` ＋ キャプション
+- SNS共有用は **1200×630 の jpg**（`*-ogp.jpg`）
+- 一覧・関連記事・トップのカードは、各記事のアイキャッチと同じ画像
+
+| 記事 | アイキャッチ | 本文 | OGP |
+| --- | --- | --- | --- |
+| article_rmo | rmo-eyecatch（hero6） | rmo-machine（hero3）、rmo-rice（hero2） | rmo-ogp.jpg |
+| article_rtkvrs | rtk-eyecatch（rtk-tractor） | rtk-auto（auto）、rtk-vrs（vrs-station） | rtk-ogp.jpg |
+| article_wataras | wtr-eyecatch（wataras） | wtr-field（hero1） | wtr-ogp.jpg |
+| article_yamadanishiki | ymd_grain | ymd_sakagura_16x9、ymd_sake（締めの引用パネル） | ymd-ogp.jpg |
+
+写真を背景にした引用パネルは `<figure class="photo-quote">` で、ほかの記事でも使えます。
 
 **記事を追加するとき**は、既存の記事をコピーして中身を差し替え、次の箇所も更新してください。
 
