@@ -17,8 +17,10 @@ tojo-site/
 ├── common.js       … 共通メニューバー・フッターの生成＋共通動作（メニュー等）
 ├── README.md       … このファイル
 ├── 404.html        … ページが見つからないときの表示（GitHub Pages が自動で使用）
-├── article/        … コラム記事（article_*.html）
-│   └── images/     … 記事内の写真（jpg＝元画像、webp＝ページで使用 ※wataras は jpg を使用）
+├── article/        … コラム（検索流入の入り口）
+│   ├── index.html  … コラム一覧（/article/）
+│   ├── article_*.html … 各コラム記事
+│   └── images/     … 記事内の写真（jpg＝元画像・OGP用、webp＝ページで使用 ※wataras は jpg を使用）
 └── images/
     ├── hero1.jpg / hero1.webp … ヒーロー画像①（jpg＝元画像、webp＝ページで使用）
     ├── hero2.jpg / hero2.webp … ヒーロー画像②（jpg＝元画像、webp＝ページで使用）
@@ -83,6 +85,40 @@ tojo-site/
 - トップのヒーローは6枚が5秒ごとに自動で切り替わります
 - 下層ページの上部画像は、`about.html`＝hero1、`solutions.html`＝hero2、
   `challenges.html`＝hero3、`contact.html`＝hero4 を使用しています
+
+## コラム記事（article/）の構成と追加方法
+
+コラムは検索から直接訪れる人の「入り口」として、次の順で組んでいます。
+見た目はすべて `style.css` 末尾の「コラム記事」ブロックで共通化しています（各記事に `<style>` は置きません）。
+
+1. パンくず（HOME ／ コラム ／ 記事名）
+2. カテゴリ・タイトル（h1）・公開日／更新日・読了時間
+3. アイキャッチ画像（16:9 で表示）
+4. サイト紹介バー（とうじょうRMOとは？＋トップへのリンク）
+5. 目次（h2 に `id="sec1"`〜 を付けてリンク）
+6. 本文
+7. 団体紹介ボックス（トップ・RMOとは・3つの目的・地域の課題へのリンク）
+8. 公式LINE CTA
+9. あわせて読みたい（他の記事カード）＋コラム一覧へ
+10. トップページへの写真バンド
+11. スマホのみ：画面下の固定メニュー（トップ／コラム一覧／上へ／公式LINE）
+
+`article_rmo.html` の画像は `images/hero6・hero3・hero2` をトリミングしたものです
+（`article/images/rmo-eyecatch`＝アイキャッチ、`rmo-machine`・`rmo-rice`＝本文、`rmo-ogp.jpg`＝SNS共有用 1200×630）。
+
+`article_yamadanishiki.html` では `ymd_sakagura` / `ymd_grain`（本文幅より広い写真＋重ねキャプション）、
+`ymd_sake`（写真を背景にした締めの引用パネル）を使っています。ほかの記事でも次のクラスで同じ演出ができます。
+
+- `<figure class="column-figure is-wide is-overlay">` … 本文より広い写真＋写真上のキャプション（スマホでは写真の下に表示）
+- `<figure class="photo-quote">` … 写真を背景にした引用パネル
+
+**記事を追加するとき**は、既存の記事をコピーして中身を差し替え、次の箇所も更新してください。
+
+- `<head>`：title / description / canonical / og:* / twitter:* / 構造化データ（JSON-LD）の見出し・日付・URL
+- `article/index.html`：一覧にカードを追加
+- 他の記事の「あわせて読みたい」：カードを追加（3件程度に絞る）
+- `common.js` のフッター「Column」、`sitemap.xml`
+- トップ `index.html` の「くわしく知る」（必要に応じて）
 
 ## コンテンツページの追加方法
 

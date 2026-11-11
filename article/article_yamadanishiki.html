@@ -1,16 +1,12 @@
-<!-- =========================================================
-     【画像パスの設定】
-     画像の差し替えは、以下の該当箇所（行）のパスを変更してください。
-
-     ① ヒーロー画像（ページ上部の見出し背景）
-        対象タグ: <img src="../images/hero6.webp" alt="山田錦の田園風景">
-        （※上の階層の images フォルダを参照）
-
-     ② 記事内画像（本文中に挿入する写真）
-        対象タグ: <img src="images/photo-01.webp" loading="lazy" decoding="async" alt="酒蔵開きの様子">
-        （※このファイルと同じ階層の images フォルダを参照）
-========================================================== -->
 <!DOCTYPE html>
+<!-- =========================================================
+     コラム記事ページ（検索流入の入り口）
+     ・ヘッダー/フッターは common.js、見た目は style.css の「コラム記事」ブロックで共通化
+     ・アイキャッチ画像：<figure class="column-eyecatch"> 内の img
+     ・本文画像：このファイルと同じ階層の images フォルダ（article/images）
+     ・記事を追加したら：article/index.html（一覧）、各記事の「あわせて読みたい」、
+       common.js のフッター、sitemap.xml にも追記してください
+========================================================== -->
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -19,6 +15,7 @@
 <meta name="description" content="近年の猛暑と気候変動により、酒米の王様「山田錦」がかつてない危機に直面しています。特A地区である兵庫県加東市東条地域で農家が挑む生存戦略と、次世代の日本酒へ向けた希望をレポートします。">
 <link rel="canonical" href="https://tojormo.com/article/article_yamadanishiki.html">
 <meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="とうじょうRMO">
 <meta property="og:site_name" content="とうじょうRMO">
 <meta property="og:locale" content="ja_JP">
 <meta property="og:type" content="article">
@@ -26,35 +23,79 @@
 <meta property="og:description" content="近年の猛暑と気候変動により、酒米の王様「山田錦」がかつてない危機に直面しています。特A地区である兵庫県加東市東条地域で農家が挑む生存戦略と、次世代の日本酒へ向けた希望をレポートします。">
 <meta property="og:url" content="https://tojormo.com/article/article_yamadanishiki.html">
 <meta property="og:image" content="https://tojormo.com/article/images/sakagura.jpg">
+<meta property="og:image:width" content="900">
+<meta property="og:image:height" content="597">
+<meta property="og:image:alt" content="酒蔵開きの様子">
+<meta property="article:published_time" content="2026-03-17T09:00:00+09:00">
+<meta property="article:modified_time" content="2026-11-11T09:00:00+09:00">
+<meta property="article:section" content="山田錦・酒米">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="その一杯は執念か希望か。気候変動から酒米の王・山田錦を守る生存戦略 ｜ とうじょうRMO">
+<meta name="twitter:description" content="近年の猛暑と気候変動により、酒米の王様「山田錦」がかつてない危機に直面しています。特A地区である兵庫県加東市東条地域で農家が挑む生存戦略と、次世代の日本酒へ向けた希望をレポートします。">
+<meta name="twitter:image" content="https://tojormo.com/article/images/sakagura.jpg">
+<link rel="preload" as="image" href="../images/hero2.webp" fetchpriority="high">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "BlogPosting",
+      "@id": "https://tojormo.com/article/article_yamadanishiki.html#article",
       "headline": "その一杯は執念か希望か。気候変動から酒米の王・山田錦を守る生存戦略",
       "description": "近年の猛暑と気候変動により、酒米の王様「山田錦」がかつてない危機に直面しています。特A地区である兵庫県加東市東条地域で農家が挑む生存戦略と、次世代の日本酒へ向けた希望をレポートします。",
       "image": [
         "https://tojormo.com/article/images/sakagura.jpg"
       ],
-      "datePublished": "2026-03-17",
-      "dateModified": "2026-10-30",
+      "datePublished": "2026-03-17T09:00:00+09:00",
+      "dateModified": "2026-11-11T09:00:00+09:00",
       "inLanguage": "ja",
+      "articleSection": "山田錦・酒米",
+      "keywords": [
+        "山田錦",
+        "酒米",
+        "気候変動",
+        "高温障害",
+        "日本酒",
+        "兵庫県加東市",
+        "特A地区"
+      ],
       "author": {
         "@type": "Organization",
         "name": "とうじょうRMO",
         "url": "https://tojormo.com/"
       },
       "publisher": {
-        "@type": "Organization",
-        "name": "とうじょうRMO",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://tojormo.com/images/favicon.png"
-        }
+        "@id": "https://tojormo.com/#organization"
       },
-      "mainEntityOfPage": "https://tojormo.com/article/article_yamadanishiki.html"
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://tojormo.com/article/article_yamadanishiki.html"
+      },
+      "isPartOf": {
+        "@id": "https://tojormo.com/#website"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://tojormo.com/#organization",
+      "name": "とうじょうRMO",
+      "url": "https://tojormo.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://tojormo.com/images/favicon.png"
+      },
+      "areaServed": "兵庫県加東市東条地域",
+      "sameAs": [
+        "https://www.instagram.com/kato.agri.japan/",
+        "https://note.com/kato_agri_japan"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://tojormo.com/#website",
+      "name": "とうじょうRMO",
+      "url": "https://tojormo.com/",
+      "inLanguage": "ja"
     },
     {
       "@type": "BreadcrumbList",
@@ -68,6 +109,12 @@
         {
           "@type": "ListItem",
           "position": 2,
+          "name": "コラム",
+          "item": "https://tojormo.com/article/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
           "name": "その一杯は執念か希望か。気候変動から酒米の王・山田錦を守る生存戦略",
           "item": "https://tojormo.com/article/article_yamadanishiki.html"
         }
@@ -76,35 +123,10 @@
   ]
 }
 </script>
-<meta name="description" content="農業DXの鍵となる「RTK」「VRS」技術。数センチの誤差をなくす自動操舵トラクターが、農作業の疲労軽減やコスト削減にもたらす5つの変化と、スマート農業が切り開く兵庫県加東市東条地域の未来を解説します。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
-<style>
-/* コラム記事用 独自スタイル */
-.column-header { text-align: center; margin-bottom: 40px; }
-.column-meta { display: flex; justify-content: center; gap: 16px; font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 20px; }
-.column-meta .date { font-family: "Inter", sans-serif; letter-spacing: 0.05em; }
-.column-meta .author { font-weight: 500; color: var(--green-deep); }
-.column-title { font-size: clamp(1.4rem, 4vw, 2.2rem); font-weight: 700; color: var(--ink); line-height: 1.5; margin-bottom: 24px; }
-.column-body { max-width: 740px; margin: 0 auto; font-size: 1rem; line-height: 2.1; color: var(--ink); }
-.column-body p { margin-bottom: 24px; }
-.column-body h2 { font-size: 1.35rem; border-bottom: 2px solid var(--green); padding-bottom: 10px; margin: 45px 0 20px; color: var(--green-deep); }
-.column-body ul, .column-body ol { margin: 0 0 24px; padding-left: 20px; background: var(--gray); border-radius: 8px; padding: 20px 24px 20px 40px; }
-.column-body ul li, .column-body ol li { margin-bottom: 10px; line-height: 1.8; color: var(--ink-soft); }
-.column-body ul li:last-child, .column-body ol li:last-child { margin-bottom: 0; }
-.column-body strong { color: var(--ink); background: linear-gradient(transparent 60%, rgba(158, 212, 171, 0.4) 60%); }
-.column-body img { border-radius: 8px; margin: 30px 0; }
-.external-link-card { display: flex; flex-direction: column; padding: 20px; border: 1px solid var(--line); border-radius: 8px; background: var(--white); margin-bottom: 30px; transition: box-shadow 0.3s ease; }
-.external-link-card:hover { box-shadow: 0 8px 24px -12px rgba(0,0,0,0.15); }
-.external-link-card .site-name { font-size: 0.75rem; color: var(--ink-soft); margin-bottom: 6px; }
-.external-link-card .link-title { font-size: 0.95rem; font-weight: 700; color: var(--green); margin-bottom: 10px; line-height: 1.5; }
-.external-link-card .link-desc { font-size: 0.8rem; color: var(--ink-soft); line-height: 1.6; }
-.column-cta { margin-top: 60px; padding: 40px 30px; background: var(--gray); border-radius: 12px; text-align: center; }
-.column-cta h3 { font-size: 1.2rem; margin-bottom: 14px; color: var(--green-deep); }
-.column-cta p { font-size: 0.9rem; margin-bottom: 24px; }
-</style>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-NV6GTSJNPZ"></script>
 <script>
@@ -114,48 +136,72 @@
   gtag('config', 'G-NV6GTSJNPZ');
 </script>
 </head>
-<body>
+<body class="is-column">
 <div id="site-header"></div>
 
-<!-- ① ヒーロー画像 -->
-<section class="page-hero">
-  <img src="../images/hero6.webp" alt="山田錦の田園風景">
-  <div class="wrap"><span class="eyebrow">Column</span><p class="page-hero-title">コラム・活動報告</p></div>
-</section>
-
-<div class="crumbs">
-  <div class="wrap"><a href="../">HOME</a> ／ コラム ／ その一杯は執念か希望か。</div>
-</div>
-
-<article class="article">
-  <div class="wrap column-body">
-    
-    <div class="column-header reveal">
-      <div class="column-meta">
-        <span class="date">2026.03.17</span>
-        <span class="author">とうじょうRMO｜兵庫県加東市東条地区</span>
-      </div>
-      <h1 class="column-title">その一杯は執念か希望か。<br>気候変動から酒米の王・山田錦を守る生存戦略</h1>
+<main class="column-page">
+  <nav class="crumbs" aria-label="パンくずリスト">
+    <div class="wrap">
+      <ol>
+        <li><a href="../">HOME</a></li>
+        <li><a href="./">コラム</a></li>
+        <li aria-current="page">その一杯は執念か希望か。</li>
+      </ol>
     </div>
+  </nav>
 
-    <div class="reveal">
+  <article class="article column">
+    <div class="wrap column-body">
+
+      <div class="column-header">
+        <a class="column-cat" href="./">山田錦・酒米</a>
+        <h1 class="column-title">その一杯は執念か希望か。<br>気候変動から酒米の王・山田錦を守る生存戦略</h1>
+        <div class="column-meta">
+          <span>公開 <time datetime="2026-03-17">2026.03.17</time></span>
+          <span>更新 <time datetime="2026-11-11">2026.11.11</time></span>
+          <span>約3分で読めます</span>
+          <span class="author">とうじょうRMO｜兵庫県加東市東条地域</span>
+        </div>
+      </div>
+
+      <figure class="column-eyecatch">
+        <img src="../images/hero2.webp" alt="手に取った山田錦の稲穂と黄金色の田んぼ" width="1084" height="1259" fetchpriority="high" decoding="async" style="object-position:center 55%;">
+      </figure>
+
+      <aside class="site-intro" aria-label="このサイトについて">
+        <p><b>とうじょうRMO</b>は、酒米「山田錦」の産地・兵庫県加東市東条地域（岡本・森・南山）で、農地と暮らしを守る農村型地域運営組織です。</p>
+        <a href="../">公式サイトのトップへ →</a>
+      </aside>
+
+      <nav class="toc" aria-label="目次">
+        <p class="toc-title">目次</p>
+        <ol>
+          <li><a href="#sec1">猛暑で崩壊する「山田錦」の神話</a></li>
+          <li><a href="#sec2">「100点」を捨てる勇気。農家が挑む4つの戦略</a></li>
+          <li><a href="#sec3">水温を下げる「地下パイプライン」が最後の砦に</a></li>
+          <li><a href="#sec4">遺伝子94％を引き継ぐ「次世代・山田錦」への希望</a></li>
+          <li><a href="#sec5">執念か、希望か。最高の一杯を未来へつなぐ</a></li>
+        </ol>
+      </nav>
+<div class="reveal">
       <p>３月、京都伏見の酒蔵開き。熱気の中、ある日本酒ファンが杜氏に「米不足や価格高騰など、酒米の調達は大丈夫ですか？ 高くても美味しいお酒を買いたい」と問いかけました。杜氏も「良い米なら高くても買う」と応じます。</p>
-      
-      <!-- ② 記事内画像 -->
-      <img src="images/sakagura.webp" loading="lazy" decoding="async" alt="酒蔵開きの様子">
+      <figure class="column-figure is-wide is-overlay">
+        <img src="images/ymd_sakagura.webp" loading="lazy" decoding="async" alt="酒樽が並ぶ酒蔵の入口" width="900" height="597" style="object-position:center 45%;">
+        <figcaption><span class="fig-label">Sakagura</span>酒蔵開きの熱気の中で交わされた、「酒米は大丈夫ですか？」という問い。</figcaption>
+      </figure>
 
       <p>しかし農業の現場が直面しているのは、経済的な問題を遥かに超える<strong>「気候変動との絶望的な戦い」</strong>です。いま、酒米の王様「山田錦」の足元で何が起きているのでしょうか。</p>
     </div>
 
     <div class="reveal">
-      <h2>1. 猛暑で崩壊する「山田錦」の神話</h2>
+      <h2 id="sec1">1. 猛暑で崩壊する「山田錦」の神話</h2>
       <p>長年、山田錦は「どんなに削っても耐え、最高の酒質を出す」最高峰の酒米として君臨してきました。しかしこの神話には、「出穂直後が暑すぎず、後半に冷え込んで米が締まる」という気候の前提条件があります。</p>
       
       <p>近年の異常な猛暑は、この前提を完全に破壊しました。出穂直後に35℃を超える猛暑が続くと、米の内部構造は脆いまま固定されてしまいます。蔵元がどれほど精米技術を駆使しても、この初期不良は修正できません。「削るほど欠点が露出する米」へと変貌しつつあるのが、偽らざる現状です。</p>
     </div>
 
     <div class="reveal">
-      <h2>2. 「100点」を捨てる勇気。農家が挑む4つの戦略</h2>
+      <h2 id="sec2">2. 「100点」を捨てる勇気。農家が挑む4つの戦略</h2>
       <p>自然の猛威に対し、農業単体で「100点」を狙うことは不可能です。いま農家に求められているのは、<strong>「負け切らない生存戦略」</strong>です。</p>
       <ul>
         <li><strong>作期分散：</strong>「例年通り」を捨て、出穂時期をずらすことで猛暑の直撃を回避する。</li>
@@ -163,17 +209,22 @@
         <li><strong>乾燥までの一体管理：</strong>登熟期のダメージを防ぐため、刈り取りから乾燥までの「間」を極限まで管理する。</li>
         <li><strong>地域でのリスク分散：</strong>個人の農家ではなく、地域全体で全滅を防ぐ体制を構築する。</li>
       </ul>
+
+      <figure class="column-figure is-wide is-overlay">
+        <img src="images/ymd_grain.webp" loading="lazy" decoding="async" alt="実りを迎えた稲穂と、コンバインで刈り取りを進める農家" width="1024" height="572">
+        <figcaption><span class="fig-label">Harvest</span>猛暑を耐え抜いた一粒を、刈り取りから乾燥まで途切れなく守る。</figcaption>
+      </figure>
     </div>
 
     <div class="reveal">
-      <h2>3. 水温を下げる「地下パイプライン」が最後の砦に</h2>
+      <h2 id="sec3">3. 水温を下げる「地下パイプライン」が最後の砦に</h2>
       <p>なかでも私たちが注目しているのが、地下埋設パイプによる給水と自動開閉水栓の導入です。一見すると単なる効率化ですが、これが山田錦を救う戦略兵器になり得ます。</p>
       
       <p>地下パイプラインを通すことで、真夏の用水路の温水化を防ぎ、冷たい水を直接田んぼへ供給できます。水切れによる地温上昇も自動水栓で防ぐことで、極端な高温障害を回避し、「酒蔵から選ばれる品質」を残す確率を大幅に引き上げます。</p>
     </div>
 
     <div class="reveal">
-      <h2>4. 遺伝子94％を引き継ぐ「次世代・山田錦」への希望</h2>
+      <h2 id="sec4">4. 遺伝子94％を引き継ぐ「次世代・山田錦」への希望</h2>
       <p>さらに兵庫県では、猛暑に打ち勝つ強さを持ちながら、<strong>山田錦の遺伝子を94％引き継ぐ「次世代の酒米」</strong>の研究が急ピッチで進んでいます。</p>
       
       <a href="https://www.kobe-np.co.jp/" target="_blank" rel="noopener" class="external-link-card">
@@ -186,30 +237,109 @@
     </div>
 
     <div class="reveal">
-      <h2>5. 執念か、希望か。最高の一杯を未来へつなぐ</h2>
+      <h2 id="sec5">5. 執念か、希望か。最高の一杯を未来へつなぐ</h2>
       <p>私たちのミッションは、既存の山田錦を守り抜いて時間を稼ぎつつ、新品種の栽培と酒造りを酒蔵と共にゼロから積み上げることです。まさに針の穴を通すような挑戦ですが、日本の宝である「最高の日本酒」を次世代へ繋ぐための唯一の道です。</p>
       
-      <p>次にあなたが手にするその一杯は、私たちが守り抜いた「執念」か、未来を切り拓く「94％の希望」か。どちらであれ、それは地域と伝統を守ろうとあがく人々が未来へつないだバトンなのです。</p>
+      <figure class="photo-quote">
+        <img src="images/ymd_sake.webp" loading="lazy" decoding="async" alt="カウンターに並ぶ日本酒の瓶" width="1024" height="572">
+        <figcaption>
+          <span class="fig-label">The last glass</span>
+          <p class="quote">次にあなたが手にするその一杯は、<br>私たちが守り抜いた「執念」か、<br>未来を切り拓く「94％の希望」か。</p>
+          <p class="quote-sub">どちらであれ、それは地域と伝統を守ろうとあがく人々が未来へつないだバトンなのです。</p>
+        </figcaption>
+      </figure>
     </div>
+      <section class="about-box" aria-labelledby="about-title">
+        <img class="about-thumb" src="../images/hero5.webp" alt="とうじょうRMOの活動に集まった地域の皆さん" width="120" height="120" loading="lazy" decoding="async">
+        <div>
+          <span class="eyebrow">About us</span>
+          <h2 id="about-title" class="about-title">この記事を書いた「とうじょうRMO」について</h2>
+          <p>岡本・森・南山の3地区が協力し、農地を守り、地域資源を活かし、暮らしを支える農村型地域運営組織（農村RMO）です。スマート農業とコミュニティの力で、山田錦の産地を次の世代へつなぐ挑戦をしています。</p>
+          <div class="about-links">
+            <a href="../" class="btn">トップページを見る →</a>
+            <a href="../about.html">RMOとは</a>
+            <a href="../solutions.html">3つの目的</a>
+            <a href="../challenges.html">地域の課題</a>
+          </div>
+        </div>
+      </section>
 
-    <div class="column-cta reveal">
-      <h3>この挑戦の目撃者になりませんか？</h3>
-      <p>とうじょうRMOでは、気候変動や担い手不足といった課題に対し、スマート農業やコミュニティの力で立ち向かっています。<br>私たちの活動の「いま」を、まずは公式LINEから覗いてみてください。</p>
-      <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top: 20px;">
-        <a href="https://lin.ee/p6sXYif" class="btn-ig" target="_blank" rel="noopener">
-          <span class="ig-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.58 2 11c0 3.95 3.55 7.24 8.35 7.89.33.07.77.22.88.5.1.25.07.65.03.9l-.14.85c-.04.25-.2.98.86.53 1.06-.45 5.73-3.38 7.82-5.78C21.24 14.3 22 12.74 22 11c0-4.42-4.48-8-10-8z"/></svg></span>
-          <span class="ig-label"><span class="ig-main">公式LINE</span><span class="ig-handle">友だち追加で最新情報</span></span>
-        </a>
-        <a href="../solutions.html" class="btn" style="background:var(--white); color:var(--green-deep); border:1px solid var(--line);">具体的な活動（3つの目的）を見る</a>
+      <div class="column-cta">
+        <h2 class="column-cta-title">この挑戦の目撃者になりませんか？</h2>
+        <p>とうじょうRMOでは、気候変動や担い手不足といった課題に対し、スマート農業やコミュニティの力で立ち向かっています。<br>私たちの活動の「いま」を、まずは公式LINEから覗いてみてください。</p>
+        <div class="btn-row">
+          <a href="https://lin.ee/p6sXYif" class="btn btn-ig" target="_blank" rel="noopener">
+            <span class="ig-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.48 3 2 6.58 2 11c0 3.95 3.55 7.24 8.35 7.89.33.07.77.22.88.5.1.25.07.65.03.9l-.14.85c-.04.25-.2.98.86.53 1.06-.45 5.73-3.38 7.82-5.78C21.24 14.3 22 12.74 22 11c0-4.42-4.48-8-10-8z"/></svg></span>
+            <span class="ig-label"><span class="ig-main">公式LINE</span><span class="ig-handle">友だち追加で最新情報</span></span>
+          </a>
+          <a href="../solutions.html" class="btn btn-ghost">具体的な活動（3つの目的）を見る</a>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <section class="section gray related" aria-labelledby="related-title">
+    <div class="wrap">
+      <div class="related-head">
+        <div>
+          <span class="eyebrow">Related</span>
+          <h2 id="related-title" class="sec-title">あわせて読みたい</h2>
+        </div>
+        <a href="./" class="more-link">コラム一覧へ →</a>
+      </div>
+      <div class="related-grid">
+      <a href="article_rmo.html" class="menu-card column-card">
+        <img src="images/rmo-eyecatch.webp" alt="" loading="lazy" decoding="async" width="640" height="480">
+        <div class="menu-body">
+          <span class="card-cat">地域づくり</span>
+          <h3>まちおこしは成功事例じゃなくていい。</h3>
+          <p>前例のないまちおこしのリアルな挑戦と、等身大の記録を残す理由。</p>
+          <span class="go">記事を読む →</span>
+        </div>
+      </a>
+      <a href="article_rtkvrs.html" class="menu-card column-card">
+        <img src="images/rtk-tractor.webp" alt="" loading="lazy" decoding="async" width="640" height="480">
+        <div class="menu-body">
+          <span class="card-cat">スマート農業</span>
+          <h3>RTK VRS “数センチの革命”</h3>
+          <p>農業DXがもたらす変化と、スマート農業が切り開く地方の未来。</p>
+          <span class="go">記事を読む →</span>
+        </div>
+      </a>
+      <a href="article_wataras.html" class="menu-card column-card">
+        <img src="images/wataras.jpg" alt="" loading="lazy" decoding="async" width="640" height="480">
+        <div class="menu-body">
+          <span class="card-cat">スマート農業</span>
+          <h3>「水位管理」が導くスマート農業の本質</h3>
+          <p>自動運転だけでは解決できない課題に挑む、水位管理の実証。</p>
+          <span class="go">記事を読む →</span>
+        </div>
+      </a>
       </div>
     </div>
-    
-    <div style="margin-top:40px; text-align:center;">
-      <a href="../" class="back-link">← トップへ戻る</a>
-    </div>
+  </section>
 
-  </div>
-</article>
+  <section class="home-band" aria-labelledby="home-band-title">
+    <img src="../images/hero1.webp" alt="" loading="lazy" decoding="async" width="2048" height="1536">
+    <div class="wrap">
+      <span class="eyebrow">Tojo RMO</span>
+      <h2 id="home-band-title">山田錦の産地・東条を、次の世代へ。</h2>
+      <p>地域の課題、私たちの取り組み、最新のお知らせ。<br>とうじょうRMOの全体像は、トップページからご覧いただけます。</p>
+      <div class="btn-row">
+        <a href="../" class="btn btn-white">トップページへ →</a>
+        <a href="../#news" class="btn btn-outline">お知らせを見る</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<nav class="column-dock" aria-label="クイックメニュー">
+  <a href="../"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg><span>トップ</span></a>
+  <a href="./"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.5" cy="6" r="1"/><circle cx="3.5" cy="12" r="1"/><circle cx="3.5" cy="18" r="1"/></svg><span>コラム一覧</span></a>
+  <a href="#" data-to-top><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg><span>上へ</span></a>
+  <a href="https://lin.ee/p6sXYif" class="dock-line" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.48 3 2 6.58 2 11c0 3.95 3.55 7.24 8.35 7.89.33.07.77.22.88.5.1.25.07.65.03.9l-.14.85c-.04.25-.2.98.86.53 1.06-.45 5.73-3.38 7.82-5.78C21.24 14.3 22 12.74 22 11c0-4.42-4.48-8-10-8z"/></svg><span>公式LINE</span></a>
+</nav>
 
 <div id="site-footer"></div>
 <script src="../common.js"></script>

@@ -46,6 +46,7 @@ const HEADER_HTML = `
       <a href="${SITE_BASE}about.html" data-nav="about.html">RMOとは</a>
       <a href="${SITE_BASE}solutions.html" data-nav="solutions.html">3つの目的</a>
       <a href="${SITE_BASE}challenges.html" data-nav="challenges.html">地域の課題</a>
+      <a href="${SITE_BASE}article/" data-nav="article">コラム</a>
       <a href="${SITE_BASE}#news">お知らせ</a>
       <a href="${SITE_BASE}contact.html">お問合せ</a>
       <a href="https://lin.ee/p6sXYif" class="btn-nav btn-line" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.48 3 2 6.58 2 11c0 3.95 3.55 7.24 8.35 7.89.33.07.77.22.88.5.1.25.07.65.03.9l-.14.85c-.04.25-.2.98.86.53 1.06-.45 5.73-3.38 7.82-5.78C21.24 14.3 22 12.74 22 11c0-4.42-4.48-8-10-8z"/></svg>公式LINEで最新情報</a>
@@ -73,6 +74,7 @@ const FOOTER_HTML = `
         </div>
         <div class="foot-col">
           <h5>Column</h5>
+          <a href="${SITE_BASE}article/">コラム一覧</a>
           <a href="${SITE_BASE}article/article_rmo.html">等身大の記録を残す理由</a>
           <a href="${SITE_BASE}article/article_rtkvrs.html">RTK VRS “数センチの革命”</a>
           <a href="${SITE_BASE}article/article_wataras.html">「水位管理」とスマート農業</a>
@@ -99,7 +101,8 @@ const FOOTER_HTML = `
   if(footerSlot) footerSlot.outerHTML = FOOTER_HTML;
 
   /* いま開いているページのメニューを強調（任意） */
-  const page = (location.pathname.split('/').pop() || 'index.html');
+  /* article/ 配下（コラム一覧・各記事）は「コラム」を強調 */
+  const page = /\/article\//.test(location.pathname) ? 'article' : (location.pathname.split('/').pop() || 'index.html');
   document.querySelectorAll('.nav-links a[data-nav]').forEach(a=>{
     if(a.getAttribute('data-nav') === page){
       a.classList.add('current');
@@ -134,3 +137,17 @@ const io = new IntersectionObserver(es=>es.forEach(e=>{
   if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
 }),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ---------- コラム記事：スマホ用クイックメニュー（トップ／一覧／上へ／LINE） ----------
+   少しスクロールしたら表示。ページ最下部（フッター）付近では隠して重なりを防ぐ */
+const dock = document.querySelector('.column-dock');
+if(dock){
+  const onScroll = ()=>{
+    const nearEnd = innerHeight + scrollY > document.documentElement.scrollHeight - 260;
+    dock.classList.toggle('show', scrollY > 420 && !nearEnd);
+  };
+  addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  const top = dock.querySelector('[data-to-top]');
+  if(top) top.addEventListener('click', e=>{ e.preventDefault(); scrollTo({top:0, behavior:'smooth'}); });
+}
