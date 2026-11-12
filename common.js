@@ -78,7 +78,7 @@ const FOOTER_HTML = `
           <a href="${SITE_BASE}article/article_rmo.html">等身大の記録を残す理由</a>
           <a href="${SITE_BASE}article/article_rtkvrs.html">RTK VRS “数センチの革命”</a>
           <a href="${SITE_BASE}article/article_wataras.html">「水位管理」とスマート農業</a>
-          <a href="${SITE_BASE}article/article_yamadanishiki.html">山田錦を守る生存戦略</a>
+          <a href="${SITE_BASE}article/article_yamadanishiki.html">山田錦の高温障害対策</a>
         </div>
         <div class="foot-col">
           <h5>Links</h5>
