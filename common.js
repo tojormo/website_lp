@@ -72,6 +72,7 @@ const FOOTER_HTML = `
           <a href="${SITE_BASE}about.html">RMOとは</a>
           <a href="${SITE_BASE}solutions.html">3つの目的</a>
           <a href="${SITE_BASE}challenges.html">地域の課題</a>
+          <a href="${SITE_BASE}tojo-yamadanishiki.html">山田錦の特A地区とは</a>
           <a href="${SITE_BASE}contact.html">お問合せ</a>
         </div>
         <div class="foot-col">

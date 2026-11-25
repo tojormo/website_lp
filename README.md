@@ -12,13 +12,16 @@ tojo-site/
 ├── solutions.html  … 3つの目的（農用地保全・地域資源活用・生活支援）
 ├── challenges.html … 地域の課題
 ├── contact.html    … お問合せ（Googleフォーム埋め込み＋連絡先）
+├── tojo-yamadanishiki.html … 解説「山田錦の特A地区・東条とは」（検索流入の柱ページ）
 ├── news.json       … お知らせデータ（ここを編集して更新）
 ├── style.css       … 全ページ共通スタイル
 ├── common.js       … 共通メニューバー・フッターの生成＋共通動作（メニュー等）
 ├── README.md       … このファイル
 ├── 404.html        … ページが見つからないときの表示（GitHub Pages が自動で使用）
 ├── tools/
-│   └── sync_chrome.py … common.js のメニュー・フッター・ファビコンを各HTMLに静的に書き込む
+│   ├── sync_chrome.py … common.js のメニュー・フッター・ファビコンを各HTMLに静的に書き込む
+│   ├── sync_news.py   … news.json のお知らせを index.html に静的に書き込む
+│   └── update_sitemap.py … sitemap.xml の更新日（lastmod）を実際の更新日に合わせる
 ├── article/        … コラム（検索流入の入り口）
 │   ├── index.html  … コラム一覧（/article/）
 │   ├── article_*.html … 各コラム記事
@@ -76,6 +79,36 @@ python tools/sync_chrome.py
 | category | 分類ラベル（例：お知らせ / イベント / 活動報告）。 |
 | title | 表示する見出し。 |
 | url | リンク先。空 "" なら文字だけ、URLを入れるとリンクになります。 |
+
+### 編集後は `tools/sync_news.py` を実行（SEO対策）
+
+お知らせは JavaScript で読み込んでいるため、そのままでは検索エンジンに中身が伝わりにくくなります。
+`news.json` を直したら、リポジトリ直下で次を実行してください。同じ内容が `index.html` の
+`<!-- news:begin -->`〜`<!-- news:end -->` の間に静的なHTMLとして書き込まれます（この部分は直接編集しないでください）。
+
+```
+python tools/sync_news.py
+```
+
+## sitemap.xml の更新日（lastmod）
+
+ページを直したら、コミットの前に次を実行してください。`sitemap.xml` の各ページの更新日が、
+実際の更新日（未コミットのページは今日、それ以外は最後にコミットした日）に書き換わります。
+
+```
+python tools/update_sitemap.py
+```
+
+新しいページを追加したときは、先に `sitemap.xml` へ `<url>` を1つ追記してから実行します。
+
+## 解説ページ「山田錦の特A地区・東条とは」（tojo-yamadanishiki.html）
+
+「山田錦 特A地区」「東条 山田錦」などの検索から訪れる人の入り口になるページです。見た目はコラム記事と同じ
+`style.css` の「コラム記事」ブロックを使っています。
+
+- 数字や制度の説明は、ページ末尾の「参考資料」（農林水産省・兵庫県・加東市・特許庁など）にもとづいています。直すときは出典も確認してください。
+- 「よくある質問」を直したら、`<head>` 内の構造化データ（`FAQPage`）も同じ文面に直してください（`about.html` も同様）。
+- 要点ボックス・表・よくある質問の見た目は、`style.css` 末尾の「解説ブロック」（`.key-points` / `.fact-table` / `.faq`）です。
 
 ## お問合せフォーム（Googleフォーム）の差し替え
 
