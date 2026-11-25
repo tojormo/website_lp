@@ -17,6 +17,8 @@ tojo-site/
 ├── common.js       … 共通メニューバー・フッターの生成＋共通動作（メニュー等）
 ├── README.md       … このファイル
 ├── 404.html        … ページが見つからないときの表示（GitHub Pages が自動で使用）
+├── tools/
+│   └── sync_chrome.py … common.js のメニュー・フッター・ファビコンを各HTMLに静的に書き込む
 ├── article/        … コラム（検索流入の入り口）
 │   ├── index.html  … コラム一覧（/article/）
 │   ├── article_*.html … 各コラム記事
@@ -37,6 +39,23 @@ tojo-site/
 プレースホルダーだけを置き、実際の中身は `common.js` が読み込み時に自動で挿入します。
 
 → **メニューやフッターの修正は `common.js` の1か所を直すだけ**で、全ページに反映されます。
+
+### 修正後は `tools/sync_chrome.py` を実行（SEO対策）
+
+JavaScript で差し込んだリンクやファビコンは、検索エンジンやSNSのプレビューが読み取れない（または読むのが遅れる）ことがあります。
+そこで、同じ中身を各HTMLのプレースホルダー内にも**静的なHTMLとして**書き込んでいます
+（`<!-- static:begin -->`〜`<!-- static:end -->`、`<head>` 内の `<!-- favicons:begin -->`〜`<!-- favicons:end -->`）。
+ブラウザでは従来どおり `common.js` が最新の内容で置き換えるため、見た目は変わりません。
+
+`common.js` のメニュー・フッター・ファビコンを直したら、リポジトリ直下で次を実行してください。
+
+```
+python tools/sync_chrome.py
+```
+
+- 静的部分のリンクはルート基準（`/about.html` など）です。
+- 自動生成部分は直接編集しないでください（次回実行時に上書きされます）。
+- 新しいページを追加したときも、`<div id="site-header"></div>` と `<div id="site-footer"></div>` を置いてから実行すれば中身が入ります。
 
 ## 「くわしく知る」セクションの背景画像
 
@@ -83,6 +102,8 @@ tojo-site/
 
 - 推奨サイズ：横 1600〜1920px 程度の横長画像
 - トップのヒーローは6枚が5秒ごとに自動で切り替わります
+- 初期表示を軽くするため、最初に読み込むのは1枚目（hero1）だけです。2枚目以降は `data-src` に書いておき、
+  「次に表示する1枚」だけを順番に先読みします（読み込みが終わっていない画像には切り替えず、次の周期まで待ちます）
 - 下層ページの上部画像は、`about.html`＝hero1、`solutions.html`＝hero2、
   `challenges.html`＝hero3、`contact.html`＝hero4 を使用しています
 
@@ -126,7 +147,7 @@ tojo-site/
 - `<head>`：title / description / canonical / og:* / twitter:* / 構造化データ（JSON-LD）の見出し・日付・URL
 - `article/index.html`：一覧にカードを追加
 - 他の記事の「あわせて読みたい」：カードを追加（3件程度に絞る）
-- `common.js` のフッター「Column」、`sitemap.xml`
+- `common.js` のフッター「Column」（→ `python tools/sync_chrome.py` を実行）、`sitemap.xml`
 - トップ `index.html` の「くわしく知る」（必要に応じて）
 
 ## コンテンツページの追加方法
@@ -138,6 +159,8 @@ tojo-site/
    // common.js の HEADER_HTML / FOOTER_HTML 内に1行追加
    <a href="xxx.html">新しいページ名</a>
    ```
+
+   編集後は `python tools/sync_chrome.py` を実行してください（各HTMLの静的メニューにも反映されます）。
 
 3. トップページ `index.html` の「くわしく知る」カードにも、必要に応じて追加
 
