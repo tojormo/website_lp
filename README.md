@@ -6,7 +6,7 @@
 ## ファイル構成
 
 ```
-tojo-site/
+website_lp/
 ├── index.html      … トップページ（ヒーロー＋RMOとは＋3つの活動＋お知らせ＋くわしく知る）
 ├── about.html      … RMOとは
 ├── solutions.html  … 3つの目的（農用地保全・地域資源活用・生活支援）
@@ -14,10 +14,14 @@ tojo-site/
 ├── contact.html    … お問合せ（Googleフォーム埋め込み＋連絡先）
 ├── tojo-yamadanishiki.html … 解説「山田錦の特A地区・東条とは」（検索流入の柱ページ）
 ├── news.json       … お知らせデータ（ここを編集して更新）
+├── info/           … お知らせからリンクするPDF（イベント案内など）
 ├── style.css       … 全ページ共通スタイル
 ├── common.js       … 共通メニューバー・フッターの生成＋共通動作（メニュー等）
 ├── README.md       … このファイル
 ├── 404.html        … ページが見つからないときの表示（GitHub Pages が自動で使用）
+├── sitemap.xml     … 検索エンジン向けのページ一覧（tools/update_sitemap.py で更新日を管理）
+├── robots.txt      … 検索エンジン向けの設定（sitemap.xml の場所を記載）
+├── CNAME           … 独自ドメイン（tojormo.com）の設定。GitHub Pages が使用するので消さない
 ├── tools/
 │   ├── sync_chrome.py … common.js のメニュー・フッター・ファビコンを各HTMLに静的に書き込む
 │   ├── sync_news.py   … news.json のお知らせを index.html に静的に書き込む
@@ -25,7 +29,7 @@ tojo-site/
 ├── article/        … コラム（検索流入の入り口）
 │   ├── index.html  … コラム一覧（/article/）
 │   ├── article_*.html … 各コラム記事
-│   └── images/     … 記事内の写真（jpg＝元画像・OGP用、webp＝ページで使用 ※wataras は jpg を使用）
+│   └── images/     … 記事内の写真（webp＝ページで使用、*-ogp.jpg＝SNS共有用、それ以外の jpg＝元画像として保管）
 └── images/
     ├── hero1.jpg / hero1.webp … ヒーロー画像①（jpg＝元画像、webp＝ページで使用）
     ├── hero2.jpg / hero2.webp … ヒーロー画像②（jpg＝元画像、webp＝ページで使用）
@@ -80,6 +84,10 @@ python tools/sync_chrome.py
 | title | 表示する見出し。 |
 | url | リンク先。空 "" なら文字だけ、URLを入れるとリンクになります。 |
 
+イベント案内などのPDFは `info/` に置き、`url` には **拡張子 `.pdf` まで含めた** URL を書きます
+（例：`https://tojormo.com/info/Info_GrassCutter20261123.pdf`）。拡張子がないとリンク切れになります。
+お知らせから外したPDFは、`info/` からも削除してください。
+
 ### 編集後は `tools/sync_news.py` を実行（SEO対策）
 
 お知らせは JavaScript で読み込んでいるため、そのままでは検索エンジンに中身が伝わりにくくなります。
@@ -100,6 +108,8 @@ python tools/update_sitemap.py
 ```
 
 新しいページを追加したときは、先に `sitemap.xml` へ `<url>` を1つ追記してから実行します。
+ページを削除したときは、`sitemap.xml` から該当する `<url>` も消してください。
+`404.html`（noindex）と `info/` のPDFは sitemap に載せません。
 
 ## 解説ページ「山田錦の特A地区・東条とは」（tojo-yamadanishiki.html）
 
@@ -172,7 +182,10 @@ python tools/update_sitemap.py
 | article_rmo | rmo-eyecatch（hero6） | rmo-machine（hero3）、rmo-rice（hero2） | rmo-ogp.jpg |
 | article_rtkvrs | rtk-eyecatch（rtk-tractor） | rtk-auto（auto）、rtk-vrs（vrs-station） | rtk-ogp.jpg |
 | article_wataras | wtr-eyecatch（wataras） | wtr-field（hero1） | wtr-ogp.jpg |
-| article_yamadanishiki | ymd_grain | ymd_sakagura_16x9、ymd_sake（締めの引用パネル） | ymd-ogp.jpg |
+| article_yamadanishiki | ymd_grain | ymd_sakagura_16x9（sakagura）、ymd_sake（締めの引用パネル） | ymd-ogp.jpg |
+
+（　）内は切り出し元の写真です。切り出し元は jpg のみ `article/images/` に保管しています（ページでは使っていません）。
+コラム一覧（`article/index.html`）の上部画像は `photo-02.webp` です。
 
 写真を背景にした引用パネルは `<figure class="photo-quote">` で、ほかの記事でも使えます。
 
@@ -206,14 +219,22 @@ python tools/update_sitemap.py
 状態では表示されません。** 簡易サーバーを立てて確認してください。
 
 ```
-cd tojo-site
+cd website_lp
 python -m http.server 8000
 # → http://localhost:8000
 ```
 
 ## 公開方法
 
-サーバーやホスティングに、`tojo-site` フォルダの中身を**そのままアップロード**するだけです。
+GitHub Pages で公開しています（リポジトリ `tojormo/website_lp` の `main` ブランチ → https://tojormo.com/ ）。
+`main` に push すると数分で反映されます。ほかのサーバーに置く場合も、フォルダの中身を**そのままアップロード**するだけです。
+
+公開前のチェック（ページや画像を直したとき）:
+
+1. `python tools/sync_chrome.py`（`common.js` を直したとき）
+2. `python tools/sync_news.py`（`news.json` を直したとき）
+3. `python tools/update_sitemap.py`（コミットの前に毎回）
+4. 使わなくなった画像・PDF は削除する（元画像の jpg は上記ルールのとおり保管）
 
 ## 補足
 

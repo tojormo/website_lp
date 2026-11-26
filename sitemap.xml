@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- lastmod は tools/update_sitemap.py で更新（404.html と info/ のPDFは載せない） -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- トップページ（canonicalと同じURLに統一／2026-11-11 コラム導線を追加） -->
+  <!-- トップページ（canonicalと同じURLに統一） -->
   <url>
     <loc>https://tojormo.com/</loc>
     <lastmod>2026-11-26</lastmod>
