@@ -97,8 +97,6 @@ header.scrolled{padding:12px 0;border-bottom:1px solid var(--line);box-shadow:0 
   animation:zoom 9s ease-in-out infinite alternate;}
 @keyframes zoom{from{transform:scale(1);}to{transform:scale(1.08);}}
 .hero-copy{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:center;}
-.hero-copy .badge{display:inline-block;align-self:flex-start;background:var(--green);color:#fff;
-  font-size:.74rem;font-weight:600;letter-spacing:.08em;padding:6px 16px;border-radius:30px;margin-bottom:22px;}
 .hero-copy h1{font-weight:700;font-size:clamp(1.9rem,5vw,3.4rem);line-height:1.4;
   color:var(--green-deep);margin-bottom:20px;letter-spacing:.01em;}
 .hero-copy .lead{font-weight:500;max-width:520px;color:var(--ink);font-size:clamp(.98rem,2vw,1.12rem);line-height:1.9;}
@@ -329,7 +327,6 @@ footer{background:#20261f;color:rgba(255,255,255,.6);padding:56px 0 30px;}
   .logo small{font-size:.54rem;}
   .hero-copy{padding:104px 28px 72px;}
   .hero-copy h1{font-size:clamp(1.5rem,6.2vw,2rem);}
-  .hero-copy .badge{font-size:.68rem;padding:6px 14px;}
   .menu-grid{grid-template-columns:1fr;}
   .menu-card{aspect-ratio:16/9;}
   .news-item{gap:10px 16px;}
@@ -584,7 +581,6 @@ header.scrolled{padding:12px 0;box-shadow:none;}
 .nav-links .btn-nav{border-radius:4px;padding:13px 22px;}
 
 /* ---------- ヒーロー ---------- */
-.hero-copy .badge{border-radius:4px;padding:7px 16px;}
 .hero-copy h1{font-weight:900;letter-spacing:0;}
 .hero-dots button{border-radius:2px;width:26px;height:4px;}
 .hero-dots button.active{transform:none;}
