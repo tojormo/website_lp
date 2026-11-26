@@ -23,7 +23,7 @@ website_lp/
 ├── robots.txt      … 検索エンジン向けの設定（sitemap.xml の場所を記載）
 ├── CNAME           … 独自ドメイン（tojormo.com）の設定。GitHub Pages が使用するので消さない
 ├── tools/
-│   ├── sync_chrome.py … common.js のメニュー・フッター・ファビコンを各HTMLに静的に書き込む
+│   ├── sync_chrome.py … common.js のメニュー・フッター・ファビコン・Clarity計測タグを各HTMLに静的に書き込む
 │   ├── sync_news.py   … news.json のお知らせを index.html に静的に書き込む
 │   └── update_sitemap.py … sitemap.xml の更新日（lastmod）を実際の更新日に合わせる
 ├── article/        … コラム（検索流入の入り口）
@@ -63,6 +63,16 @@ python tools/sync_chrome.py
 - 静的部分のリンクはルート基準（`/about.html` など）です。
 - 自動生成部分は直接編集しないでください（次回実行時に上書きされます）。
 - 新しいページを追加したときも、`<div id="site-header"></div>` と `<div id="site-footer"></div>` を置いてから実行すれば中身が入ります。
+
+## アクセス解析（Google アナリティクス / Microsoft Clarity）
+
+- **Google アナリティクス（GA4）**：測定ID `G-NV6GTSJNPZ`。各ページの `<head>` に直接書いています。
+- **Microsoft Clarity**（ヒートマップ・操作の録画）：プロジェクトID `zjlnmoalsy`。
+  `common.js` の `CLARITY_ID` で管理し、`python tools/sync_chrome.py` で全ページの `<head>`
+  （`<!-- clarity:begin -->`〜`<!-- clarity:end -->`）に書き込んでいます。
+  - IDを変えるときは `CLARITY_ID` を書き換えて再実行、計測を止めるときは `''`（空）にして再実行します。
+  - 新しいページを追加したときも、`python tools/sync_chrome.py` を実行すれば計測タグが入ります。
+  - 管理画面：https://clarity.microsoft.com
 
 ## 「くわしく知る」セクションの背景画像
 
