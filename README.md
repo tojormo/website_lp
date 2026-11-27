@@ -13,6 +13,7 @@ website_lp/
 ├── challenges.html … 地域の課題
 ├── contact.html    … お問合せ（Googleフォーム埋め込み＋連絡先）
 ├── tojo-yamadanishiki.html … 解説「山田錦の特A地区・東条とは」（検索流入の柱ページ）
+├── yamadanishiki.html … 解説「山田錦とは」（品種の特徴・歴史・育て方。上のページと対になる柱ページ）
 ├── news.json       … お知らせデータ（ここを編集して更新）
 ├── info/           … お知らせからリンクするPDF（イベント案内など）
 ├── style.css       … 全ページ共通スタイル
@@ -129,6 +130,20 @@ python tools/update_sitemap.py
 - 数字や制度の説明は、ページ末尾の「参考資料」（農林水産省・兵庫県・加東市・特許庁など）にもとづいています。直すときは出典も確認してください。
 - 「よくある質問」を直したら、`<head>` 内の構造化データ（`FAQPage`）も同じ文面に直してください（`about.html` も同様）。
 - 要点ボックス・表・よくある質問の見た目は、`style.css` 末尾の「解説ブロック」（`.key-points` / `.fact-table` / `.faq`）です。
+
+## 解説ページ「山田錦とは」（yamadanishiki.html）
+
+「山田錦とは」「山田錦 特徴」「山田錦 歴史」などの検索から訪れる人の入り口になるページです。
+`tojo-yamadanishiki.html`（産地・特A地区の解説）と役割を分け、こちらは**品種そのもの**を扱います。
+同じ内容を両方に書かず、相互にリンクで行き来できるようにしてください。
+
+- 数字や歴史は「参考資料」（加東市「広報かとう」令和6年11月号、農林水産省掲載の日本農業遺産申請書など）にもとづいています。
+- 「現場の記録」の囲み（`<aside class="field-note">`）と7章は、note の記事をもとに再構成しています。見た目は `style.css` の「解説ブロック」内 `.field-note` です。
+- 「よくある質問」を直したら、`<head>` 内の構造化データ（`FAQPage`）も同じ文面に直してください。
+- 写真：`images/yamadanishiki-inaho`（アイキャッチ・本文）、`yamadanishiki-app`（記録アプリ）、`yamadanishiki-kansatsu`（圃場観察）、
+  `yamadanishiki-ogp.jpg`（SNS共有用 1200×630）。jpg / png が元画像、webp がページで使用。
+- `tojo-yamadanishiki.html` の「産地の知恵」（鉄粉の話）の写真は `images/tojo-hari`（釣り針・イメージ）です。
+  土壌調査と遊離酸化鉄の説明は、兵庫県 加西農業改良普及センターへの依頼・聞き取りにもとづきます。
 
 ## お問合せフォーム（Googleフォーム）の差し替え
 
