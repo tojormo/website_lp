@@ -50,7 +50,7 @@ const FAVICONS = [
 const HEADER_HTML = `
 <header id="hdr">
   <div class="wrap nav">
-    <a href="${SITE_BASE}" class="logo">とうじょうRMO<small>兵庫県加東市 東条地域</small></a>
+    <a href="${SITE_BASE}" class="logo has-mark"><img src="${SITE_BASE}images/rmo-logo.webp" alt="" class="logo-mark" width="44" height="44" decoding="async"><span class="logo-text">とうじょうRMO<small>兵庫県加東市 東条地域</small></span></a>
     <nav class="nav-links" id="navlinks">
       <a href="${SITE_BASE}" data-nav="index.html">HOME</a>
       <a href="${SITE_BASE}about.html" data-nav="about.html">RMOとは</a>

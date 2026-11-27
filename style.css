@@ -52,6 +52,12 @@ header.scrolled{padding:12px 0;border-bottom:1px solid var(--line);box-shadow:0 
   line-height:1.3;white-space:nowrap;}
 .logo small{display:block;font-family:"Noto Sans JP";font-weight:500;
   font-size:.58rem;letter-spacing:.1em;color:var(--ink-soft);margin-top:1px;white-space:nowrap;}
+/* メニューバーのロゴマーク（images/rmo-logo.webp。元画像は images/favicon.png） */
+.logo.has-mark{flex-direction:row;align-items:center;justify-content:flex-start;gap:10px;}
+.logo-mark{width:44px;height:44px;flex:0 0 auto;border-radius:50%;transition:width .4s var(--ease),height .4s var(--ease);}
+.logo-text{display:flex;flex-direction:column;justify-content:center;min-width:0;}
+header.scrolled .logo-mark{width:38px;height:38px;}
+@media(max-width:520px){.logo.has-mark{gap:8px;}.logo-mark,header.scrolled .logo-mark{width:36px;height:36px;}}
 .nav-links{display:flex;gap:30px;align-items:center;}
 .nav-links a{font-size:.86rem;font-weight:500;letter-spacing:.04em;color:var(--ink);
   position:relative;transition:color .3s;}

@@ -32,6 +32,7 @@ website_lp/
 │   ├── article_*.html … 各コラム記事
 │   └── images/     … 記事内の写真（webp＝ページで使用、*-ogp.jpg＝SNS共有用、それ以外の jpg＝元画像として保管）
 └── images/
+    ├── rmo-logo.webp … メニューバーのロゴマーク（favicon.png を縮小したもの。差し替えたら同じ名前で上書き）
     ├── hero1.jpg / hero1.webp … ヒーロー画像①（jpg＝元画像、webp＝ページで使用）
     ├── hero2.jpg / hero2.webp … ヒーロー画像②（jpg＝元画像、webp＝ページで使用）
     ├── hero3.jpg / hero3.webp … ヒーロー画像③（jpg＝元画像、webp＝ページで使用）
